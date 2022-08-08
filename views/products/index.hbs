@@ -1,0 +1,39 @@
+{{#extends 'base'}}
+
+{{#block 'content'}}
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Cost</th>
+            <th>Description</th>
+            <th>Dimension</th>
+        </tr>
+
+    </thead>
+    <tbody>
+        {{#each products}}
+        <tr>
+            <td>
+                {{this.product_id}}
+            </td>
+            <td>
+                {{this.name}}
+            </td>
+            <td>
+                {{this.cost}}
+            </td>
+            <td>
+                {{this.description}}
+            </td>
+            <td>
+                {{this.length}} x {{this.width}} x {{this.height}}
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+{{/block}}
+
+{{/extends}}
