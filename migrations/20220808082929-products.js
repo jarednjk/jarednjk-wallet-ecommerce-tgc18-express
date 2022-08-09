@@ -16,7 +16,7 @@ exports.setup = function(options, seedLink) {
 
 exports.up = function(db) {
   return db.createTable('products', {
-    product_id: {
+    id: {
       type: 'int',
       primaryKey: true, 
       autoIncrement: true, 
@@ -62,18 +62,17 @@ exports.up = function(db) {
       unsigned: true
     },
     date_created: {
-      type: 'datetime',
+      type: 'timestamp',
+      defaultValue: new String('CURRENT_TIMESTAMP'),
       notNull: true,
     },
     image_url: {
       type: 'string',
       length: 255,
-      notNull: true
     },
     thumbnail_url: {
       type: 'string',
       length: 255,
-      notNull: true
     }
   });
 };
