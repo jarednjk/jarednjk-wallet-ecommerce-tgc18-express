@@ -29,7 +29,7 @@ const productRoutes = require('./routes/products');
 
 async function main() {
     app.use('/', landingRoutes);
-    app.use('/wallets', productRoutes);
+    app.use('/products', productRoutes);
 }
 
 main();

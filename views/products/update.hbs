@@ -1,11 +1,16 @@
 {{#extends 'base'}}
 
 {{#block 'content'}}
-<h1>Update Product: {{product.name}}</h1>
-<form method="POST">
-    {{{form}}}
-    <input type="submit" value="Update Product" class="btn btn-primary"/>
-</form>
+<div class="border border-dark rounded mx-auto p-3 mt-4 shadow" style="max-width: 500px">
+    <h2 class="display-6">Update Product</h2>
+    <p class="pb-2 lead text-muted">{{product.name}} (Product ID: #{{product.id}})</p>
+    <form method="POST" class="mx-auto">
+        {{{form}}}
+        <input type="submit" value="Update Product" class="mt-4 btn btn-dark" />
+    </form>
+</div>
+
+
 {{/block}}
 
 {{/extends}}

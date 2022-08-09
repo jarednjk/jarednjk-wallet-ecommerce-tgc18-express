@@ -10,6 +10,7 @@
             <th>Description</th>
             <th>Dimension</th>
             <th>Weight</th>
+            <th>Actions</th>
         </tr>
 
     </thead>
@@ -33,6 +34,21 @@
             </td>
             <td>
                 {{this.weight}}
+            </td>
+            <td>
+                <div class="d-flex">
+                    <a class="rounded" href="/products/{{this.id}}/update" style="background-color:black"
+                        onMouseOver="this.style.backgroundColor='white'"
+                        onMouseOut="this.style.backgroundColor='black'"><big><i class="bi bi-pencil-square p-1"
+                                style="color:white" onMouseOver="this.style.color='black'"
+                                onMouseOut="this.style.color='white'"></i></big></a>
+
+                    <a class="rounded ms-1" href="/products/{{this.id}}/delete" style="background-color:black"
+                        onMouseOver="this.style.backgroundColor='white'"
+                        onMouseOut="this.style.backgroundColor='black'"><big><i class="bi bi-trash3-fill p-1"
+                                style="color:white" onMouseOver="this.style.color='black'"
+                                onMouseOut="this.style.color='white'"></i></big></a>
+                </div>
             </td>
         </tr>
         {{/each}}

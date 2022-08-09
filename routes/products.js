@@ -26,7 +26,7 @@ router.post('/create', async (req, res) => {
         'success': async (form) => {
             const product = new Product(form.data);
             await product.save();
-            res.redirect('/wallets');
+            res.redirect('/products');
         },
         'error': async (form) => {
             res.render('products/create', {
@@ -73,7 +73,7 @@ router.post('/:product_id/update', async (req, res) => {
         'success': async (form) => {
             product.set(form.data);
             product.save();
-            res.redirect('/wallets');
+            res.redirect('/products');
         },
         'error': async (form) => {
             res.render('products/update', {
@@ -82,6 +82,28 @@ router.post('/:product_id/update', async (req, res) => {
             })
         }
     })
+})
+
+router.get('/:product_id/delete', async (req, res) => {
+    const product = await Product.where({
+        'id': req.params.product_id
+    }).fetch({
+        require: true
+    });
+    res.render('products/delete', {
+        'product': product.toJSON()
+    })
+})
+
+router.post('/:product_id/delete', async (req, res) => {
+    // fetch the product that we want to delete
+    const product = await Product.where({
+        'id': req.params.product_id
+    }).fetch({
+        require: true
+    });
+    await product.destroy();
+    res.redirect('/products')
 })
 
 module.exports = router;
