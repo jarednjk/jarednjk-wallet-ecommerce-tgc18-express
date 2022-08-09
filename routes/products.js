@@ -36,4 +36,52 @@ router.post('/create', async (req, res) => {
     })
 })
 
+router.get('/:product_id/update', async (req, res) => {
+    const productId = req.params.product_id
+    const product = await Product.where({
+        'id': productId
+    }).fetch({
+        require: true
+    });
+
+    const productForm = createProductForm();
+
+    productForm.fields.name.value = product.get('name');
+    productForm.fields.cost.value = product.get('cost');
+    productForm.fields.description.value = product.get('description');
+    productForm.fields.weight.value = product.get('weight');
+    productForm.fields.length.value = product.get('length');
+    productForm.fields.width.value = product.get('width');
+    productForm.fields.height.value = product.get('height');
+    productForm.fields.stock.value = product.get('stock');
+
+    res.render('products/update', {
+        'form': productForm.toHTML(bootstrapField),
+        'product': product.toJSON()
+    })
+})
+
+router.post('/:product_id/update', async (req, res) => {
+    const product = await Product.where({
+        'id': req.params.product_id
+    }).fetch({
+        require: true
+    });
+
+    const productForm = createProductForm();
+    productForm.handle(req, {
+        'success': async (form) => {
+            product.set(form.data);
+            product.save();
+            res.redirect('/wallets');
+        },
+        'error': async (form) => {
+            res.render('products/update', {
+                'form': form.toHTML(bootstrapField),
+                'product': product.toJSON()
+            })
+        }
+    })
+})
+
 module.exports = router;
