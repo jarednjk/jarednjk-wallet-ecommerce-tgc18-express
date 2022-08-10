@@ -61,6 +61,16 @@ exports.up = function(db) {
       notNull: true,
       unsigned: true
     },
+    card_slot: {
+      type: 'smallint',
+      notNull: true,
+      unsigned: true
+    },
+    coin_pocket: {
+      type: 'string',
+      notNull: true,
+      length: '20'
+    },
     date_created: {
       type: 'timestamp',
       defaultValue: new String('CURRENT_TIMESTAMP'),
@@ -73,7 +83,7 @@ exports.up = function(db) {
     thumbnail_url: {
       type: 'string',
       length: 255,
-    }
+    },
   });
 };
 

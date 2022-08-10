@@ -2,6 +2,7 @@
 const forms = require('forms');
 const fields = forms.fields;
 const validators = forms.validators;
+const widgets = forms.widgets;
 
 var bootstrapField = function (name, object) {
     if (!Array.isArray(object.widget.classes)) { object.widget.classes = []; }
@@ -23,7 +24,7 @@ var bootstrapField = function (name, object) {
     return '<div class="form-group">' + label + widget + error + '</div>';
 };
 
-const createProductForm = () => {
+const createProductForm = (materials, brands) => {
     return forms.create({
         name: fields.string({
             required: true,
@@ -80,12 +81,47 @@ const createProductForm = () => {
             },
             validators: [validators.integer(), validators.min(0)]
         }),
+        card_slot: fields.string({
+            label: 'Card Slot',
+            required: true,
+            cssClasses: {
+                label: ['form-label']
+            },
+            validators: [validators.integer(), validators.min(0)]
+        }),
+        coin_pocket: fields.string({
+            label: 'Coin Pocket',
+            required: true,
+            cssClasses: {
+                label: ['form-label']
+            }
+        }),
         stock: fields.string({
             required: true,
             cssClasses: {
                 label: ['form-label']
             },
             validators: [validators.integer(), validators.min(0)]
+        }),
+        material_id: fields.string({
+            label: 'Material',
+            required: true,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            },
+            widget: widgets.select(),
+            choices: materials
+        }),
+        brand_id: fields.string({
+            label: 'Brand',
+            required: true,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            },
+            widget: widgets.select(),
+            choices: brands
         })
     })
 };

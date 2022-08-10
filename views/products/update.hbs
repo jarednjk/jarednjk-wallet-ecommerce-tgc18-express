@@ -1,12 +1,13 @@
 {{#extends 'base'}}
 
 {{#block 'content'}}
-<div class="border border-dark rounded mx-auto p-3 mt-4 shadow" style="max-width: 500px">
-    <h2 class="display-6">Update Product</h2>
-    <p class="pb-2 lead text-muted">{{product.name}} (Product ID: #{{product.id}})</p>
-    <form method="POST" class="mx-auto">
+<div class="border border-dark rounded mx-auto px-4 my-4 shadow" style="max-width: 500px">
+    <h2 class="display-6 py-3">Update Product</h2>
+    {{!-- <p class="pb-1 lead text-muted">{{product.name}} (Product ID: #{{product.id}})</p> --}}
+    <form method="POST">
         {{{form}}}
-        <input type="submit" value="Update Product" class="mt-4 btn btn-dark" />
+        <a href="/products" class="btn btn-outline-secondary">No, Cancel</a>
+        <input type="submit" value="Yes, Update" class="my-4 btn btn-dark" />
     </form>
 </div>
 

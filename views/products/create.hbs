@@ -1,11 +1,13 @@
 {{#extends 'base'}}
 
 {{#block 'content'}}
-<h1>Create New Product</h1>
-<form method="POST">
-    {{{form}}}
-    <input type="submit" value="Add Product" class="btn btn-primary" />
-</form>
+<div class="border border-dark rounded mx-auto px-4 my-4 shadow" style="max-width: 500px">
+    <h2 class="display-6 py-3">Add New Product</h2>
+    <form method="POST">
+        {{{form}}}
+        <input type="submit" value="Add Product" class="btn btn-dark my-4" />
+    </form>
+</div>
 {{/block}}
 
 {{/extends}}

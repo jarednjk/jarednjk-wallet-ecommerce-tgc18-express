@@ -3,25 +3,43 @@ const router = express.Router();
 const { bootstrapField, createProductForm } = require('../forms');
 
 // #1 import in the Product model
-const { Product } = require('../models')
+const { Product, Material, Brand } = require('../models')
 
 router.get('/', async (req, res) => {
     // #2 - fetch all the products (ie, SELECT * from products)
-    let products = await Product.collection().fetch();
+    let products = await Product.collection().fetch({
+        withRelated: ['material', 'brand']
+    });
     res.render('products/index', {
         'products': products.toJSON() // #3 - convert collection to JSON
     })
 })
 
 router.get('/create', async (req, res) => {
-    const productForm = createProductForm();
+    const allMaterials = await Material.fetchAll().map((material) => {
+        return [material.get('id'), material.get('name')];
+    })
+    const allBrands = await Brand.fetchAll().map((brand) => {
+        return [brand.get('id'), brand.get('name')];
+    })
+
+    const productForm = createProductForm(allMaterials, allBrands);
+
     res.render('products/create', {
         'form': productForm.toHTML(bootstrapField)
     })
 })
 
 router.post('/create', async (req, res) => {
-    const productForm = createProductForm();
+    const allMaterials = await Material.fetchAll().map((material) => {
+        return [material.get('id'), material.get('name')];
+    })
+    const allBrands = await Brand.fetchAll().map((brand) => {
+        return [brand.get('id'), brand.get('name')];
+    })
+
+    const productForm = createProductForm(allMaterials, allBrands);
+
     productForm.handle(req, {
         'success': async (form) => {
             const product = new Product(form.data);
@@ -37,6 +55,7 @@ router.post('/create', async (req, res) => {
 })
 
 router.get('/:product_id/update', async (req, res) => {
+    // retrieve the product
     const productId = req.params.product_id
     const product = await Product.where({
         'id': productId
@@ -44,7 +63,14 @@ router.get('/:product_id/update', async (req, res) => {
         require: true
     });
 
-    const productForm = createProductForm();
+    const allMaterials = await Material.fetchAll().map((material) => {
+        return [material.get('id'), material.get('name')];
+    })
+    const allBrands = await Brand.fetchAll().map((brand) => {
+        return [brand.get('id'), brand.get('name')];
+    })
+
+    const productForm = createProductForm(allMaterials, allBrands);
 
     productForm.fields.name.value = product.get('name');
     productForm.fields.cost.value = product.get('cost');
@@ -54,6 +80,10 @@ router.get('/:product_id/update', async (req, res) => {
     productForm.fields.width.value = product.get('width');
     productForm.fields.height.value = product.get('height');
     productForm.fields.stock.value = product.get('stock');
+    productForm.fields.card_slot.value = product.get('card_slot');
+    productForm.fields.coin_pocket.value = product.get('coin_pocket');
+    productForm.fields.material_id.value = product.get('material_id');
+    productForm.fields.brand_id.value = product.get('brand_id');
 
     res.render('products/update', {
         'form': productForm.toHTML(bootstrapField),
@@ -68,7 +98,16 @@ router.post('/:product_id/update', async (req, res) => {
         require: true
     });
 
-    const productForm = createProductForm();
+
+    const allMaterials = await Material.fetchAll().map((material) => {
+        return [material.get('id'), material.get('name')];
+    })
+    const allBrands = await Brand.fetchAll().map((brand) => {
+        return [brand.get('id'), brand.get('name')];
+    })
+
+    const productForm = createProductForm(allMaterials, allBrands);
+
     productForm.handle(req, {
         'success': async (form) => {
             product.set(form.data);
