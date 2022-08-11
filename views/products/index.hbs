@@ -6,7 +6,7 @@
         <tr>
             <th>ID</th>
             <th>Name</th>
-            <th>Cost</th>
+            <th scope="col">Cost (SGD)</th>
             <th>Description</th>
             <th>Dimension</th>
             <th>Weight</th>
@@ -26,8 +26,8 @@
             <td>
                 {{this.name}}
             </td>
-            <td>
-                {{this.cost}}
+            <td scope="row">
+                {{centsToDollars this.cost}}
             </td>
             <td>
                 {{this.description}}

@@ -24,92 +24,51 @@ var bootstrapField = function (name, object) {
     return '<div class="form-group">' + label + widget + error + '</div>';
 };
 
-const createProductForm = (materials, brands) => {
+const createProductForm = (materials, brands, categories, features) => {
     return forms.create({
         name: fields.string({
             required: true,
             errorAfterField: true,
-            cssClasses: {
-                label: ['form-label']
-            }
         }),
         cost: fields.string({
             label: 'Cost (SGD)',
             required: true,
             errorAfterField: true,
-            cssClasses: {
-                label: ['form-label']
-            },
             validators: [validators.integer(), validators.min(0)]
         }),
         description: fields.string({
             required: true,
             errorAfterField: true,
-            cssClasses: {
-                label: ['form-label']
-            }
         }),
         weight: fields.string({
             label: 'Weight (g)',
             required: true,
-            cssClasses: {
-                label: ['form-label']
-            },
             validators: [validators.integer(), validators.min(0)]
         }),
         length: fields.string({
             label: 'Length (mm)',
             required: true,
-            cssClasses: {
-                label: ['form-label']
-            },
             validators: [validators.integer(), validators.min(0)]
         }),
         width: fields.string({
             label: 'Width (mm)',
             required: true,
-            cssClasses: {
-                label: ['form-label']
-            },
             validators: [validators.integer(), validators.min(0)]
         }),
         height: fields.string({
             label: 'Height (mm)',
             required: true,
-            cssClasses: {
-                label: ['form-label']
-            },
             validators: [validators.integer(), validators.min(0)]
         }),
         card_slot: fields.string({
             label: 'Card Slot',
             required: true,
-            cssClasses: {
-                label: ['form-label']
-            },
-            validators: [validators.integer(), validators.min(0)]
-        }),
-        coin_pocket: fields.string({
-            label: 'Coin Pocket',
-            required: true,
-            cssClasses: {
-                label: ['form-label']
-            }
-        }),
-        stock: fields.string({
-            required: true,
-            cssClasses: {
-                label: ['form-label']
-            },
             validators: [validators.integer(), validators.min(0)]
         }),
         material_id: fields.string({
             label: 'Material',
             required: true,
             errorAfterField: true,
-            cssClasses: {
-                label: ['form-label']
-            },
             widget: widgets.select(),
             choices: materials
         }),
@@ -117,13 +76,70 @@ const createProductForm = (materials, brands) => {
             label: 'Brand',
             required: true,
             errorAfterField: true,
-            cssClasses: {
-                label: ['form-label']
-            },
             widget: widgets.select(),
             choices: brands
+        }),
+        category_id: fields.string({
+            label: 'Category',
+            required: true,
+            errorAfterField: true,   
+            widget: widgets.select(),
+            choices: categories
+        }),
+        features: fields.string({
+            required: true,
+            errorAfterField: true,
+            widget: widgets.multipleSelect(),
+            choices: features
         })
     })
 };
 
-module.exports = { createProductForm, bootstrapField };
+const createVariantForm = (products, colors) => {
+    return forms.create({
+        stock: fields.string({
+            required: true,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            },
+            validators: [validators.integer(), validators.min(0)]
+        }),
+        image_url: fields.string({
+            required: true,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            },
+        }),
+        thumbnail_url: fields.string({
+            required: true,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            },
+        }),
+        color_id: fields.string({
+            label: 'Color',
+            required: true,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            },
+            widget: widgets.select(),
+            choices: colors
+        }),
+        product_id: fields.string({
+            label: 'Product',
+            required: true,
+            errorAfterField: true,
+            cssClasses: {
+                label: ['form-label']
+            },
+            widget: widgets.select(),
+            choices: products
+        }),
+    })
+}
+
+module.exports = { createProductForm, createVariantForm, bootstrapField };

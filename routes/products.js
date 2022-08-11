@@ -1,14 +1,14 @@
 const express = require("express");
 const router = express.Router();
-const { bootstrapField, createProductForm } = require('../forms');
+const { bootstrapField, createProductForm, createVariantForm } = require('../forms');
 
 // #1 import in the Product model
-const { Product, Material, Brand } = require('../models')
+const { Product, Material, Brand, Category, Feature, Variant, Color } = require('../models')
 
 router.get('/', async (req, res) => {
     // #2 - fetch all the products (ie, SELECT * from products)
     let products = await Product.collection().fetch({
-        withRelated: ['material', 'brand']
+        withRelated: ['material', 'brand', 'category']
     });
     res.render('products/index', {
         'products': products.toJSON() // #3 - convert collection to JSON
@@ -22,8 +22,14 @@ router.get('/create', async (req, res) => {
     const allBrands = await Brand.fetchAll().map((brand) => {
         return [brand.get('id'), brand.get('name')];
     })
+    const allCategories = await Category.fetchAll().map((category) => {
+        return [category.get('id'), category.get('name')];
+    })
+    const allFeatures = await Feature.fetchAll().map((feature) => {
+        return [feature.get('id'), feature.get('name')];
+    })
 
-    const productForm = createProductForm(allMaterials, allBrands);
+    const productForm = createProductForm(allMaterials, allBrands, allCategories, allFeatures);
 
     res.render('products/create', {
         'form': productForm.toHTML(bootstrapField)
@@ -37,13 +43,24 @@ router.post('/create', async (req, res) => {
     const allBrands = await Brand.fetchAll().map((brand) => {
         return [brand.get('id'), brand.get('name')];
     })
+    const allCategories = await Category.fetchAll().map((category) => {
+        return [category.get('id'), category.get('name')];
+    })
+    const allFeatures = await Feature.fetchAll().map((feature) => {
+        return [feature.get('id'), feature.get('name')];
+    })
 
-    const productForm = createProductForm(allMaterials, allBrands);
+    const productForm = createProductForm(allMaterials, allBrands, allCategories, allFeatures);
 
     productForm.handle(req, {
         'success': async (form) => {
-            const product = new Product(form.data);
+            let {features, ...productData} = form.data;
+            const product = new Product(productData);
             await product.save();
+            
+            if (features) {
+                await product.features().attach(features.split(","));
+            }
             res.redirect('/products');
         },
         'error': async (form) => {
@@ -60,7 +77,8 @@ router.get('/:product_id/update', async (req, res) => {
     const product = await Product.where({
         'id': productId
     }).fetch({
-        require: true
+        require: true,
+        withRelated: ['features']
     });
 
     const allMaterials = await Material.fetchAll().map((material) => {
@@ -69,8 +87,14 @@ router.get('/:product_id/update', async (req, res) => {
     const allBrands = await Brand.fetchAll().map((brand) => {
         return [brand.get('id'), brand.get('name')];
     })
+    const allCategories = await Category.fetchAll().map((category) => {
+        return [category.get('id'), category.get('name')];
+    })
+    const allFeatures = await Feature.fetchAll().map((feature) => {
+        return [feature.get('id'), feature.get('name')];
+    })
 
-    const productForm = createProductForm(allMaterials, allBrands);
+    const productForm = createProductForm(allMaterials, allBrands, allCategories, allFeatures);
 
     productForm.fields.name.value = product.get('name');
     productForm.fields.cost.value = product.get('cost');
@@ -79,11 +103,14 @@ router.get('/:product_id/update', async (req, res) => {
     productForm.fields.length.value = product.get('length');
     productForm.fields.width.value = product.get('width');
     productForm.fields.height.value = product.get('height');
-    productForm.fields.stock.value = product.get('stock');
     productForm.fields.card_slot.value = product.get('card_slot');
-    productForm.fields.coin_pocket.value = product.get('coin_pocket');
     productForm.fields.material_id.value = product.get('material_id');
     productForm.fields.brand_id.value = product.get('brand_id');
+    productForm.fields.category_id.value = product.get('category_id');
+
+
+    let selectedFeatures = await product.related('features').pluck('id');
+    productForm.fields.features.value = selectedFeatures;
 
     res.render('products/update', {
         'form': productForm.toHTML(bootstrapField),
@@ -95,7 +122,8 @@ router.post('/:product_id/update', async (req, res) => {
     const product = await Product.where({
         'id': req.params.product_id
     }).fetch({
-        require: true
+        require: true,
+        withRelated: ['features']
     });
 
 
@@ -105,13 +133,32 @@ router.post('/:product_id/update', async (req, res) => {
     const allBrands = await Brand.fetchAll().map((brand) => {
         return [brand.get('id'), brand.get('name')];
     })
+    const allCategories = await Category.fetchAll().map((category) => {
+        return [category.get('id'), category.get('name')];
+    })
+    const allFeatures = await Feature.fetchAll().map((feature) => {
+        return [feature.get('id'), feature.get('name')];
+    })
 
-    const productForm = createProductForm(allMaterials, allBrands);
+    const productForm = createProductForm(allMaterials, allBrands, allCategories, allFeatures);
 
     productForm.handle(req, {
         'success': async (form) => {
-            product.set(form.data);
+            let { features, ...productData } = form.data
+            product.set(productData);
             product.save();
+
+            // update features
+            let featureIds = features.split(',');
+            let existingFeatureIds = await product.related('features').pluck('id');
+
+            // remove all features that aren't selected
+            let toRemove = existingFeatureIds( id => featureIds.includes(id) === false);
+            await product.features().detach(toRemove);
+
+            // add in all the features select in form
+            await product.features().attach(featureIds);
+
             res.redirect('/products');
         },
         'error': async (form) => {
@@ -143,6 +190,12 @@ router.post('/:product_id/delete', async (req, res) => {
     });
     await product.destroy();
     res.redirect('/products')
+})
+
+// Variant Routes
+
+router.get('/:product_id/variants', async (req, res) => {
+
 })
 
 module.exports = router;

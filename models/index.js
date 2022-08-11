@@ -7,8 +7,31 @@ const Product = bookshelf.model('Product', {
     },
     brand() {
         return this.belongsTo('Brand');
+    },
+    category() {
+        return this.belongsTo('Category');
+    },
+    features() {
+        return this.belongsToMany('Feature');
     }
-});
+})
+
+const Variant = bookshelf.model('Variant', {
+    tableName: 'variants',
+    product() {
+        return this.belongsTo('Product');
+    },
+    color() {
+        return this.belongsTo('Color');
+    }
+})
+
+const Feature = bookshelf.model('Feature', {
+    tableName: 'features',
+    products() {
+        return this.belongsToMany('Product');
+    }
+})
 
 const Material = bookshelf.model('Material',{
     tableName: 'materials',
@@ -24,4 +47,18 @@ const Brand = bookshelf.model('Brand', {
     }
 })
 
-module.exports = { Product, Material, Brand };
+const Category = bookshelf.model('Category', {
+    tableName: 'categories',
+    products() {
+        return this.hasMany('Product');
+    }
+})
+
+const Color = bookshelf.model('Color', {
+    tableName: 'colors',
+    variants() {
+        return this.hasMany('Variant');
+    }
+})
+
+module.exports = { Product, Material, Brand, Category, Feature, Variant, Color };

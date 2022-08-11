@@ -15,19 +15,23 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db) {
-  return  db.createTable('categories',{
-    id: { type: 'int', unsigned: true, primaryKey:true, autoIncrement:true},
-    name: { type: 'string', length:100},
-})
+  return db.createTable('colors', {
+    id: {
+      type: 'smallint',
+      unsigned: true,
+      primaryKey: true,
+      autoIncrement: true
+    },
+    name: {
+      type: 'string',
+      length: '45',
+      notNull: true
+    }
+  });
 };
 
 exports.down = function(db) {
-return db.dropTable('categories')
-
-};
-
-exports.down = function(db) {
-  return db.dropTable('brands');
+  return null;
 };
 
 exports._meta = {
