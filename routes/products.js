@@ -61,6 +61,7 @@ router.post('/create', async (req, res) => {
             if (features) {
                 await product.features().attach(features.split(","));
             }
+            req.flash('success_messages', `New product "${product.get('name')}" has been created!`)
             res.redirect('/products');
         },
         'error': async (form) => {
@@ -153,12 +154,13 @@ router.post('/:product_id/update', async (req, res) => {
             let existingFeatureIds = await product.related('features').pluck('id');
 
             // remove all features that aren't selected
-            let toRemove = existingFeatureIds( id => featureIds.includes(id) === false);
+            let toRemove = existingFeatureIds.filter( id => featureIds.includes(id) === false);
             await product.features().detach(toRemove);
 
             // add in all the features select in form
             await product.features().attach(featureIds);
 
+            req.flash('success_messages', `"${product.get('name')}" has been updated!`)
             res.redirect('/products');
         },
         'error': async (form) => {
@@ -189,6 +191,8 @@ router.post('/:product_id/delete', async (req, res) => {
         require: true
     });
     await product.destroy();
+
+    req.flash('success_messages', `"${product.get('name')}" has been deleted!`)
     res.redirect('/products')
 })
 
