@@ -8,7 +8,7 @@ const { Product, Material, Brand, Category, Feature, Variant, Color } = require(
 router.get('/', async (req, res) => {
     // #2 - fetch all the products (ie, SELECT * from products)
     let products = await Product.collection().fetch({
-        withRelated: ['material', 'brand', 'category']
+        withRelated: ['material', 'brand', 'category', 'features']
     });
     res.render('products/index', {
         'products': products.toJSON() // #3 - convert collection to JSON

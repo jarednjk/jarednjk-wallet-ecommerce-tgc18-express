@@ -1,18 +1,28 @@
 {{#extends 'base'}}
 
 {{#block 'content'}}
+<div class="d-flex justify-content-end">
+    <a class="rounded text-decoration-none py-1" href="/products/create" style="background-color:black"
+        onMouseOver="this.style.backgroundColor='white'" onMouseOut="this.style.backgroundColor='black'">
+        <span class="p-2" style="color:white" onMouseOver="this.style.color='black'"
+                onMouseOut="this.style.color='white'">Add Product</span>
+        </a>
+</div>
+
+
 <table class="table">
     <thead>
         <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th scope="col">Cost (SGD)</th>
+            <th>Product ID</th>
+            <th>Product Name</th>
             <th>Description</th>
-            <th>Dimension</th>
-            <th>Weight</th>
+            <th>Cost (SGD)</th>
+            <th>Dimension(cm)<br />(L x W x H)</th>
+            <th>Weight (kg)</th>
             <th>Material</th>
             <th>Brand</th>
-            <th>Stock</th>
+            <th>Category</th>
+            <th>Features</th>
             <th>Actions</th>
         </tr>
 
@@ -26,17 +36,17 @@
             <td>
                 {{this.name}}
             </td>
-            <td scope="row">
-                {{centsToDollars this.cost}}
-            </td>
             <td>
                 {{this.description}}
             </td>
             <td>
-                {{this.length}} x {{this.width}} x {{this.height}}
+                {{this.cost}}
             </td>
             <td>
-                {{this.weight}}
+                {{mmToCm this.length}} x {{mmToCm this.width}} x {{mmToCm this.height}}
+            </td>
+            <td>
+                {{gramsToKilograms this.weight}}
             </td>
             <td>
                 {{this.material.name}}
@@ -45,17 +55,28 @@
                 {{this.brand.name}}
             </td>
             <td>
-                {{this.stock}}
+                {{this.category.name}}
+            </td>
+            <td>
+                {{#each this.features}}
+                <span class="badge bg-primary">{{this.name}}</span>
+                {{/each}}
             </td>
             <td>
                 <div class="d-flex">
-                    <a class="rounded" href="/products/{{this.id}}/update" style="background-color:black"
+                    <a class="rounded" href="/products/{{this.id}}/variant" style="background-color:black"
+                        onMouseOver="this.style.backgroundColor='white'"
+                        onMouseOut="this.style.backgroundColor='black'"><big><i class="bi bi-files p-1"
+                                style="color:white" onMouseOver="this.style.color='black'"
+                                onMouseOut="this.style.color='white'"></i></big></a>
+
+                    <a class="rounded mx-1" href="/products/{{this.id}}/update" style="background-color:black"
                         onMouseOver="this.style.backgroundColor='white'"
                         onMouseOut="this.style.backgroundColor='black'"><big><i class="bi bi-pencil-square p-1"
                                 style="color:white" onMouseOver="this.style.color='black'"
                                 onMouseOut="this.style.color='white'"></i></big></a>
 
-                    <a class="rounded ms-1" href="/products/{{this.id}}/delete" style="background-color:black"
+                    <a class="rounded" href="/products/{{this.id}}/delete" style="background-color:black"
                         onMouseOver="this.style.backgroundColor='white'"
                         onMouseOut="this.style.backgroundColor='black'"><big><i class="bi bi-trash3-fill p-1"
                                 style="color:white" onMouseOver="this.style.color='black'"

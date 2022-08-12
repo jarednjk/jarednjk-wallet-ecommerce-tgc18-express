@@ -23,6 +23,15 @@ app.use(
     })
 );
 
+// hbs helpers
+hbs.registerHelper('gramsToKilograms', (grams) => {
+    return (parseInt(grams) / 1000).toFixed(2);
+})
+
+hbs.registerHelper('mmToCm', (mm) => {
+    return (parseInt(mm) / 10);
+})
+
 // import in routes
 const landingRoutes = require('./routes/landing');
 const productRoutes = require('./routes/products');
