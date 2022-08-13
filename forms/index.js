@@ -8,7 +8,7 @@ var bootstrapField = function (name, object) {
     if (!Array.isArray(object.widget.classes)) { object.widget.classes = []; }
 
     if (object.widget.classes.indexOf('form-control') === -1) {
-        object.widget.classes.push('form-control');
+        object.widget.classes.push('form-control my-1');
     }
 
     var validationclass = object.value && !object.error ? 'is-valid' : '';
@@ -21,7 +21,7 @@ var bootstrapField = function (name, object) {
     var error = object.error ? '<div class="invalid-feedback">' + object.error + '</div>' : '';
 
     var widget = object.widget.toHTML(name, object);
-    return '<div class="form-group">' + label + widget + error + '</div>';
+    return '<div class="form-group my-3">' + label + widget + error + '</div>';
 };
 
 const createProductForm = (materials, brands, categories, features) => {
@@ -100,32 +100,20 @@ const createVariantForm = (products, colors) => {
         stock: fields.string({
             required: true,
             errorAfterField: true,
-            cssClasses: {
-                label: ['form-label']
-            },
             validators: [validators.integer(), validators.min(0)]
         }),
         image_url: fields.string({
             required: true,
             errorAfterField: true,
-            cssClasses: {
-                label: ['form-label']
-            },
         }),
         thumbnail_url: fields.string({
             required: true,
             errorAfterField: true,
-            cssClasses: {
-                label: ['form-label']
-            },
         }),
         color_id: fields.string({
             label: 'Color',
             required: true,
             errorAfterField: true,
-            cssClasses: {
-                label: ['form-label']
-            },
             widget: widgets.select(),
             choices: colors
         }),
@@ -133,13 +121,49 @@ const createVariantForm = (products, colors) => {
             label: 'Product',
             required: true,
             errorAfterField: true,
-            cssClasses: {
-                label: ['form-label']
-            },
             widget: widgets.select(),
             choices: products
         }),
     })
 }
 
-module.exports = { createProductForm, createVariantForm, bootstrapField };
+const createRegistrationForm = () => {
+    return forms.create({
+        first_name: fields.string({
+            required: true,
+            errorAfterField: true,
+        }),
+        last_name: fields.string({
+            required: true,
+            errorAfterField: true,
+        }),
+        email: fields.string({
+            required: true,
+            errorAfterField: true,
+        }),
+        password: fields.password({
+            required: true,
+            errorAfterField: true,
+        }),
+        confirm_password: fields.password({
+            required: true,
+            errorAfterField: true,
+            validators: [validators.matchField('password')]
+        }),
+    })
+}
+
+const createLoginForm = () => {
+    return forms.create({
+        'email': fields.string({
+            required: true,
+            errorAfterField: true
+        }),
+        'password': fields.password({
+            required: true,
+            errorAfterField: true
+        })
+    })
+}
+
+module.exports = { createProductForm, createRegistrationForm, createLoginForm, createVariantForm, bootstrapField };

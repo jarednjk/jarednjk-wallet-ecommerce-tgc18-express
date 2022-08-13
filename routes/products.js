@@ -198,8 +198,26 @@ router.post('/:product_id/delete', async (req, res) => {
 
 // Variant Routes
 
-router.get('/:product_id/variants', async (req, res) => {
+// router.get('/:product_id/variants', async (req, res) => {
+//     const product = await 
+// })
 
-})
+// router.get('/:product_id/variants/create', async (req, res) => {
+//     const product = await Product.where({
+//         'id': req.params.product_id
+//     }).fetch({
+//         require: true
+//     })
+
+//     const allColors = await Color.fetchAll().map((color) => {
+//         return [color.get('id'), color.get('name')]
+//     })
+
+//     const variantForm = createVariantForm(allColors);
+
+//     res.render('variants/create', {
+        
+//     })
+// })
 
 module.exports = router;

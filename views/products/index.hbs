@@ -18,7 +18,7 @@
             <th>Description</th>
             <th>Cost (SGD)</th>
             <th>Dimension(cm)<br />(L x W x H)</th>
-            <th>Weight (kg)</th>
+            <th>Weight (g)</th>
             <th>Material</th>
             <th>Brand</th>
             <th>Category</th>
@@ -46,7 +46,7 @@
                 {{mmToCm this.length}} x {{mmToCm this.width}} x {{mmToCm this.height}}
             </td>
             <td>
-                {{gramsToKilograms this.weight}}
+                {{this.weight}}
             </td>
             <td>
                 {{this.material.name}}

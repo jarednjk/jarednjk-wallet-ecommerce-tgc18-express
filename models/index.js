@@ -61,4 +61,12 @@ const Color = bookshelf.model('Color', {
     }
 })
 
-module.exports = { Product, Material, Brand, Category, Feature, Variant, Color };
+const Role = bookshelf.model('Role', {
+    tableName: 'roles'
+})
+
+const User = bookshelf.model('User', {
+    tableName: 'users'
+})
+
+module.exports = { Product, Material, Brand, Category, Feature, Variant, Color, Role, User };

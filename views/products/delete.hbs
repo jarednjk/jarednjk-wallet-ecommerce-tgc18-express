@@ -11,12 +11,16 @@
         <table class="table">
             <thead>
                 <tr class="table-light border-dark">
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Cost</th>
+                    <th>Product ID</th>
+                    <th>Product Name</th>
                     <th>Description</th>
-                    <th>Dimension</th>
-                    <th>Weight</th>
+                    <th>Cost (SGD)</th>
+                    <th>Dimension(cm)<br />(L x W x H)</th>
+                    <th>Weight (g)</th>
+                    <th>Material</th>
+                    <th>Brand</th>
+                    <th>Category</th>
+                    <th>Features</th>
                 </tr>
 
             </thead>
@@ -29,16 +33,30 @@
                         {{product.name}}
                     </td>
                     <td>
-                        {{product.cost}}
-                    </td>
-                    <td>
                         {{product.description}}
                     </td>
                     <td>
-                        {{product.length}} x {{product.width}} x {{product.height}}
+                        {{product.cost}}
+                    </td>
+                    <td>
+                        {{mmToCm product.length}} x {{mmToCm product.width}} x {{mmToCm product.height}}
                     </td>
                     <td>
                         {{product.weight}}
+                    </td>
+                    <td>
+                        {{product.material.name}}
+                    </td>
+                    <td>
+                        {{product.brand.name}}
+                    </td>
+                    <td>
+                        {{product.category.name}}
+                    </td>
+                    <td>
+                        {{#each product.features}}
+                        <span class="badge bg-primary">{{product.name}}</span>
+                        {{/each}}
                     </td>
                 </tr>
             </tbody>

@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato&family=Roboto&display=swap');
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Lato', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    font-weight: 700;
+}
+
+p {
+    font-family: 'Roboto', sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+#login-button,
+#login-button:hover {
+    color: white;
+    text-decoration: none;
+}
+
+.cta-button {
+    background-color: rgb(159, 99, 20) !important;
+    border-color: rgb(159, 99, 20) !important;
+}
+
+.cta-button:hover,
+.cta-button:focus,
+.cta-button:active {
+    background-color: rgb(207, 134, 40) !important;
+    border-color: rgb(207, 134, 40) !important;
+    box-shadow: none;
+}
+
+
+.button-decoration-none,
+.button-decoration-none:hover {
+    color: white;
+    text-decoration: none;
+}

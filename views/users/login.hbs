@@ -1,0 +1,13 @@
+{{#extends 'base'}}
+{{#block 'content'}}
+<div class="border border-dark rounded mx-auto px-4 my-5 shadow" style="max-width: 350px">
+    <h2 class="pt-3">Login</h2>
+    <p class="pb-2 lead text-muted">Welcome back!<br />Please login to your account.</p>
+    <form method="POST" class="mb-2">
+        {{{form}}}
+        <input type="submit" class="cta-button my-3 btn btn-dark" value="Login" />
+    </form>
+</div>
+
+{{/block}}
+{{/extends}}
