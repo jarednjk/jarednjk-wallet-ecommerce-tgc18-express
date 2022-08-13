@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { bootstrapField, createProductForm, createVariantForm } = require('../forms');
 const { checkIfAuthenticated } = require('../middlewares');
+const dataLayer = require('../dal/products');
 
 // #1 import in the Product model
 const { Product, Material, Brand, Category, Feature, Variant, Color } = require('../models')
@@ -17,18 +18,10 @@ router.get('/', checkIfAuthenticated, async (req, res) => {
 })
 
 router.get('/create', checkIfAuthenticated, async (req, res) => {
-    const allMaterials = await Material.fetchAll().map((material) => {
-        return [material.get('id'), material.get('name')];
-    })
-    const allBrands = await Brand.fetchAll().map((brand) => {
-        return [brand.get('id'), brand.get('name')];
-    })
-    const allCategories = await Category.fetchAll().map((category) => {
-        return [category.get('id'), category.get('name')];
-    })
-    const allFeatures = await Feature.fetchAll().map((feature) => {
-        return [feature.get('id'), feature.get('name')];
-    })
+    const allMaterials = await dataLayer.getAllMaterials();
+    const allBrands = await dataLayer.getAllBrands();
+    const allCategories = await dataLayer.getAllCategories();
+    const allFeatures = await dataLayer.getAllFeatures();
 
     const productForm = createProductForm(allMaterials, allBrands, allCategories, allFeatures);
 
@@ -38,18 +31,10 @@ router.get('/create', checkIfAuthenticated, async (req, res) => {
 })
 
 router.post('/create', checkIfAuthenticated, async (req, res) => {
-    const allMaterials = await Material.fetchAll().map((material) => {
-        return [material.get('id'), material.get('name')];
-    })
-    const allBrands = await Brand.fetchAll().map((brand) => {
-        return [brand.get('id'), brand.get('name')];
-    })
-    const allCategories = await Category.fetchAll().map((category) => {
-        return [category.get('id'), category.get('name')];
-    })
-    const allFeatures = await Feature.fetchAll().map((feature) => {
-        return [feature.get('id'), feature.get('name')];
-    })
+    const allMaterials = await dataLayer.getAllMaterials();
+    const allBrands = await dataLayer.getAllBrands();
+    const allCategories = await dataLayer.getAllCategories();
+    const allFeatures = await dataLayer.getAllFeatures();
 
     const productForm = createProductForm(allMaterials, allBrands, allCategories, allFeatures);
 
@@ -75,26 +60,13 @@ router.post('/create', checkIfAuthenticated, async (req, res) => {
 
 router.get('/:product_id/update', checkIfAuthenticated, async (req, res) => {
     // retrieve the product
-    const productId = req.params.product_id
-    const product = await Product.where({
-        'id': productId
-    }).fetch({
-        require: true,
-        withRelated: ['features']
-    });
+    const productId = req.params.product_id;
+    const product = await dataLayer.getProductByID(productId);
 
-    const allMaterials = await Material.fetchAll().map((material) => {
-        return [material.get('id'), material.get('name')];
-    })
-    const allBrands = await Brand.fetchAll().map((brand) => {
-        return [brand.get('id'), brand.get('name')];
-    })
-    const allCategories = await Category.fetchAll().map((category) => {
-        return [category.get('id'), category.get('name')];
-    })
-    const allFeatures = await Feature.fetchAll().map((feature) => {
-        return [feature.get('id'), feature.get('name')];
-    })
+    const allMaterials = await dataLayer.getAllMaterials();
+    const allBrands = await dataLayer.getAllBrands();
+    const allCategories = await dataLayer.getAllCategories();
+    const allFeatures = await dataLayer.getAllFeatures();
 
     const productForm = createProductForm(allMaterials, allBrands, allCategories, allFeatures);
 
@@ -121,27 +93,13 @@ router.get('/:product_id/update', checkIfAuthenticated, async (req, res) => {
 })
 
 router.post('/:product_id/update', checkIfAuthenticated, async (req, res) => {
-    const product = await Product.where({
-        'id': req.params.product_id
-    }).fetch({
-        require: true,
-        withRelated: ['features']
-    });
+    const productId = req.params.product_id;
+    const product = await dataLayer.getProductByID(productId);
 
-
-    const allMaterials = await Material.fetchAll().map((material) => {
-        return [material.get('id'), material.get('name')];
-    })
-    const allBrands = await Brand.fetchAll().map((brand) => {
-        return [brand.get('id'), brand.get('name')];
-    })
-    const allCategories = await Category.fetchAll().map((category) => {
-        return [category.get('id'), category.get('name')];
-    })
-    const allFeatures = await Feature.fetchAll().map((feature) => {
-        return [feature.get('id'), feature.get('name')];
-    })
-
+    const allMaterials = await dataLayer.getAllMaterials();
+    const allBrands = await dataLayer.getAllBrands();
+    const allCategories = await dataLayer.getAllCategories();
+    const allFeatures = await dataLayer.getAllFeatures();
     const productForm = createProductForm(allMaterials, allBrands, allCategories, allFeatures);
 
     productForm.handle(req, {
@@ -174,11 +132,9 @@ router.post('/:product_id/update', checkIfAuthenticated, async (req, res) => {
 })
 
 router.get('/:product_id/delete', checkIfAuthenticated, async (req, res) => {
-    const product = await Product.where({
-        'id': req.params.product_id
-    }).fetch({
-        require: true
-    });
+    const productId = req.params.product_id;
+    const product = await dataLayer.getProductByID(productId);
+
     res.render('products/delete', {
         'product': product.toJSON()
     })
@@ -186,11 +142,9 @@ router.get('/:product_id/delete', checkIfAuthenticated, async (req, res) => {
 
 router.post('/:product_id/delete', checkIfAuthenticated, async (req, res) => {
     // fetch the product that we want to delete
-    const product = await Product.where({
-        'id': req.params.product_id
-    }).fetch({
-        require: true
-    });
+    const productId = req.params.product_id;
+    const product = await dataLayer.getProductByID(productId);
+
     await product.destroy();
 
     req.flash('success_messages', `"${product.get('name')}" has been deleted!`)
