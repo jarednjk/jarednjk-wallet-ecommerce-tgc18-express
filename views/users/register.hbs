@@ -4,6 +4,7 @@
     <h2 class="pt-3">Register</h2>
     <p class="pb-2 lead text-muted">Let's get you onboard</p>
     <form method="POST" class="mb-2">
+        <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
         {{{form}}}
         <input type="submit" value="Register" class="cta-button my-3 btn btn-dark" />
     </form>

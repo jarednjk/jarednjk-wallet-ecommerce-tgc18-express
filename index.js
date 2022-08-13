@@ -6,6 +6,7 @@ require("dotenv").config();
 const session = require('express-session');
 const flash = require('connect-flash');
 const FileStore = require('session-file-store')(session);
+const csrf = require('csurf');
 
 // create an instance of express app
 let app = express();
@@ -34,7 +35,13 @@ app.use(session({
     resave: false,
     saveUninitialized: true
   }))
-  
+
+// enable CSRF
+app.use(csrf());
+app.use(function(req, res, next) {
+    res.locals.csrfToken = req.csrfToken();
+    next();
+})
 
 // hbs helpers
 hbs.registerHelper('gramsToKilograms', (grams) => {
