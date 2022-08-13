@@ -1,5 +1,12 @@
 const express = require('express');
 const router = express.Router();
+const crypto = require('crypto');
+
+const getHashedPassword = (password) => {
+    const sha256 = crypto.createHash('sha256');
+    const hash = sha256.update(password).digest('base64');
+    return hash;
+}
 
 const { User } = require('../models');
 
@@ -20,7 +27,7 @@ router.post('/register', async (req, res) => {
                 'first_name': form.data.first_name,
                 'last_name': form.data.last_name,
                 'email': form.data.email,
-                'password': form.data.password,
+                'password': getHashedPassword(form.data.password),
                 'role_id': 2
             });
             await user.save();
@@ -59,7 +66,7 @@ router.post('/login', async (req, res) => {
                 res.redirect('/users/login');
             } else {
                 // check if the password matches
-                if (user.get('password') === form.data.password) {
+                if (user.get('password') === getHashedPassword(form.data.password)) {
                     // store user details
                     req.session.user = {
                         id: user.get('id'),
