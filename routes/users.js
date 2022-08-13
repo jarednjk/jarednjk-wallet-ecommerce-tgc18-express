@@ -9,7 +9,6 @@ const getHashedPassword = (password) => {
 }
 
 const { User } = require('../models');
-
 const { createRegistrationForm, bootstrapField, createLoginForm } = require('../forms');
 
 router.get('/register', async (req, res) => {
@@ -74,15 +73,15 @@ router.post('/login', async (req, res) => {
                         last_name: user.get('last_name'),
                         email: user.get('email')
                     }
-                    req.flash('success_messages', `Welcome back, ${user.get('first_name')} ${user.get('last_name')}!`)
+                    req.flash('success_messages', `Welcome back, ${user.get('first_name')} ${user.get('last_name')}!`);
                     res.redirect('/users/profile');
                 } else {
-                    req.flash("error_messages", "The email or password you entered is incorrect. Please try again.")
-                    res.redirect('/users/login')
+                    req.flash("error_messages", "The email or password you entered is incorrect. Please try again.");
+                    res.redirect('/users/login');
                 }
             }
         }, 'error': (form) => {
-            req.flash('error_messages', "There are some problems logging you in. Please fill in the form again")
+            req.flash('error_messages', "There are some problems logging you in. Please fill in the form again");
             res.render('users/login', {
                 'form': form.toHTML(bootstrapField)
             })
