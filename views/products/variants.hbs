@@ -9,10 +9,10 @@
     </a>
 </div>
 
-
-<table class="table table-hover">
+<h2 class="display-6 pt-3">Product</h2>
+<table class="table">
     <thead>
-        <tr>
+        <tr class="table-dark border-dark">
             <th>Product ID</th>
             <th>Product Name</th>
             <th>Description</th>
@@ -23,74 +23,100 @@
             <th>Brand</th>
             <th>Category</th>
             <th>Features</th>
-            <th>Actions</th>
+            {{!-- <th>Actions</th> --}}
         </tr>
 
     </thead>
     <tbody>
-        {{#each products}}
-        <tr>
+        <tr class="table-secondary">
             <td>
-                {{this.id}}
+                {{product.id}}
             </td>
             <td>
-                {{this.name}}
+                {{product.name}}
             </td>
             <td>
-                {{this.description}}
+                {{product.description}}
             </td>
             <td>
-                {{this.cost}}
+                {{product.cost}}
             </td>
             <td>
-                {{mmToCm this.length}} x {{mmToCm this.width}} x {{mmToCm this.height}}
+                {{mmToCm product.length}} x {{mmToCm product.width}} x {{mmToCm product.height}}
             </td>
             <td>
-                {{this.weight}}
+                {{product.weight}}
             </td>
             <td>
-                {{this.material.name}}
+                {{product.material.name}}
             </td>
             <td>
-                {{this.brand.name}}
+                {{product.brand.name}}
             </td>
             <td>
-                {{this.category.name}}
+                {{product.category.name}}
             </td>
             <td>
-                {{#each this.features}}
+                {{#each product.features}}
                 <span class="badge bg-primary">{{this.name}}</span>
                 {{/each}}
             </td>
-            <td>
-                <div class="pt-1 mb-2">
-                    <a class="rounded text-decoration-none py-1" href="/products/create" style="background-color:black"
-                        onMouseOver="this.style.backgroundColor='white'"
-                        onMouseOut="this.style.backgroundColor='black'">
-                        <span class="p-2" style="color:white" onMouseOver="this.style.color='black'"
-                            onMouseOut="this.style.color='white'">Variants</span>
-                    </a>
-                </div>
+            {{!-- <td>
                 <div class="d-flex">
-                    {{!-- <a class="rounded" href="/products/{{this.id}}/variants" style="background-color:black"
-                        onMouseOver="this.style.backgroundColor='white'"
-                        onMouseOut="this.style.backgroundColor='black'"><big><i class="bi bi-files p-1"
-                                style="color:white" onMouseOver="this.style.color='black'"
-                                onMouseOut="this.style.color='white'"></i></big></a> --}}
-
                     <a class="rounded me-1" href="/products/{{this.id}}/update" style="background-color:black"
                         onMouseOver="this.style.backgroundColor='white'"
-                        onMouseOut="this.style.backgroundColor='black'"><big><i class="bi bi-pencil-square p-2"
+                        onMouseOut="this.style.backgroundColor='black'"><big><i class="bi bi-pencil-square p-1"
                                 style="color:white" onMouseOver="this.style.color='black'"
                                 onMouseOut="this.style.color='white'"></i></big></a>
 
                     <a class="rounded" href="/products/{{this.id}}/delete" style="background-color:black"
                         onMouseOver="this.style.backgroundColor='white'"
-                        onMouseOut="this.style.backgroundColor='black'"><big><i class="bi bi-trash3-fill p-2"
+                        onMouseOut="this.style.backgroundColor='black'"><big><i class="bi bi-trash3-fill p-1"
                                 style="color:white" onMouseOver="this.style.color='black'"
                                 onMouseOut="this.style.color='white'"></i></big></a>
                 </div>
+            </td> --}}
+        </tr>
+    </tbody>
+</table>
 
+<h2 class="display-6 pt-5">Color Variants</h2>
+<table class="table">
+    <thead>
+        <tr class="table-dark border-dark">
+            <th>Image</th>
+            <th>Color</th>
+            <th>Stock</th>
+            <th>Actions</th>
+        </tr>
+
+    </thead>
+    <tbody>
+        {{#each variants}}
+        <tr class="table-secondary">
+            <td>
+            
+            </td>
+            <td>
+                {{this.color.name}}
+            </td>
+            <td>
+                {{this.stock}}
+            </td>
+            <td>
+                <div class="d-flex">
+                    <a class="rounded me-1" href="/products/{{this.id}}/update" style="background-color:black"
+                        onMouseOver="this.style.backgroundColor='white'"
+                        onMouseOut="this.style.backgroundColor='black'"><big><i class="bi bi-pencil-square p-1"
+                                style="color:white" onMouseOver="this.style.color='black'"
+                                onMouseOut="this.style.color='white'"></i></big></a>
+
+                    <a class="rounded" href="/products/{{this.id}}/delete" style="background-color:black"
+                        onMouseOver="this.style.backgroundColor='white'"
+                        onMouseOut="this.style.backgroundColor='black'"><big><i class="bi bi-trash3-fill p-1"
+                                style="color:white" onMouseOver="this.style.color='black'"
+                                onMouseOut="this.style.color='white'"></i></big></a>
+                </div>
             </td>
         </tr>
         {{/each}}

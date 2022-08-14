@@ -153,26 +153,39 @@ router.post('/:product_id/delete', checkIfAuthenticated, async (req, res) => {
 
 // Variant Routes
 
-// router.get('/:product_id/variants', async (req, res) => {
-//     const product = await 
-// })
+router.get('/:product_id/variants', async (req, res) => {
+    const productId = req.params.product_id;
+    const product = await dataLayer.getProductByID(productId);
 
-// router.get('/:product_id/variants/create', async (req, res) => {
-//     const product = await Product.where({
-//         'id': req.params.product_id
-//     }).fetch({
-//         require: true
-//     })
+    const variants = await Variant.where({
+        product_id: productId
+    }).fetchAll({
+        require: false,
+        withRelated: ['product', 'color']
+    })
 
-//     const allColors = await Color.fetchAll().map((color) => {
-//         return [color.get('id'), color.get('name')]
-//     })
+    res.render('products/variants', {
+        product: product.toJSON(),
+        variants: variants.toJSON()
+    })
+})
 
-//     const variantForm = createVariantForm(allColors);
+router.get('/:product_id/variants/create', async (req, res) => {
+    const product = await Product.where({
+        'id': req.params.product_id
+    }).fetch({
+        require: true
+    })
 
-//     res.render('variants/create', {
+    const allColors = await Color.fetchAll().map((color) => {
+        return [color.get('id'), color.get('name')]
+    })
+
+    const variantForm = createVariantForm(allColors);
+
+    res.render('variants/create', {
         
-//     })
-// })
+    })
+})
 
 module.exports = router;
