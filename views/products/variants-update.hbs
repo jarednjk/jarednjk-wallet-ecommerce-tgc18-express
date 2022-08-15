@@ -1,12 +1,12 @@
 {{#extends 'base'}}
 {{#block 'content'}}
-<div class="border border-dark rounded mx-auto px-4 my-4 shadow" style="max-width: 500px">
-    <h2 class="display-6 py-3">Add New Color Variant</h2>
+<div class="border border-dark rounded mx-auto px-4 shadow my-5" style="max-width: 500px">
+    <h2 class="display-6 py-3">Update Color Variant</h2>
     <form method="POST">
         <input type="hidden" name="_csrf" value="{{csrfToken}}" />
         {{{variantForm}}}
         <a href="/products/{{variant.product_id}}/variants" class="btn btn-outline-secondary">Cancel</a>
-        <input type="submit" value="Add Variant" class="btn btn-dark my-4" />
+        <input type="submit" value="Update Variant" class="btn btn-dark my-4" />
     </form>
 </div>
 

@@ -157,12 +157,7 @@ router.get('/:product_id/variants', async (req, res) => {
     const productId = req.params.product_id;
     const product = await dataLayer.getProductByID(productId);
 
-    const variants = await Variant.where({
-        product_id: productId
-    }).fetchAll({
-        require: false,
-        withRelated: ['product', 'color']
-    })
+    const variants = await dataLayer.getVariantsByProductID(productId);
 
     res.render('products/variants', {
         product: product.toJSON(),
@@ -174,9 +169,7 @@ router.get('/:product_id/variants/create', async (req, res) => {
     const productId = req.params.product_id;
     const product = await dataLayer.getProductByID(productId);
 
-    const allColors = await Color.fetchAll().map((color) => {
-        return [color.get('id'), color.get('name')]
-    })
+    const allColors = await dataLayer.getAllColors();
 
     const variantForm = createVariantForm(allColors);
 
@@ -190,9 +183,7 @@ router.post('/:product_id/variants/create', async (req, res) => {
     const productId = req.params.product_id;
     const product = await dataLayer.getProductByID(productId);
 
-    const allColors = await Color.fetchAll().map((color) => {
-        return [color.get('id'), color.get('name')]
-    })
+    const allColors = await dataLayer.getAllColors();
 
     const variantForm = createVariantForm(allColors);
 
@@ -205,12 +196,53 @@ router.post('/:product_id/variants/create', async (req, res) => {
             });
             await variant.save();
 
-            req.flash('success_messages', `New color variant of "${product.get('name')}" has been created!`)
-            res.redirect(`/products/${req.params.product_id}/variants`)
+            req.flash('success_messages', `New color variant of "${product.get('name')}" has been created!`);
+            res.redirect(`/products/${req.params.product_id}/variants`);
         },
         'error': async (form) => {
             res.render('products/variants-create', {
                 product: product.toJSON(),
+                variantForm: form.toHTML(bootstrapField)
+            })
+        }
+    })
+})
+
+router.get('/:product_id/variants/:variant_id/update', async (req, res) => {
+    const variantId = req.params.variant_id;
+    const variant = await dataLayer.getVariantByID(variantId);
+
+    const allColors = await dataLayer.getAllColors();
+    
+    const variantForm = createVariantForm(allColors);
+    variantForm.fields.stock.value = variant.get('stock');
+
+
+    res.render('products/variants-update', {
+        variant: variant.toJSON(),
+        variantForm: variantForm.toHTML(bootstrapField)
+    })
+})
+
+router.post('/:product_id/variants/:variant_id/update', async (req, res) => {
+    const variantId = req.params.variant_id;
+    const variant = await dataLayer.getVariantByID(variantId);
+
+    const allColors = await dataLayer.getAllColors();
+
+    const variantForm = createVariantForm(allColors);
+
+    variantForm.handle(req, {
+        'success': async (form) => {
+            variant.set(form.data);
+            variant.save();
+
+            req.flash('success_messages', `Color variant has been updated!`);
+            res.redirect(`/products/${req.params.product_id}/variants`);
+        },
+        'error': async (form) => {
+            res.render('products/variants-create', {
+                variant: variant.toJSON(),
                 variantForm: form.toHTML(bootstrapField)
             })
         }

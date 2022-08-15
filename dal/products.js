@@ -33,6 +33,37 @@ const getProductByID = async (productId) => {
     });
 }
 
+const getVariantsByProductID = async (productId) => {
+    return await Variant.where({
+        'id': parseInt(productId)
+    }).fetchAll({
+        require: false,
+        withRelated: ['product', 'color']
+    })
+}
+
+const getVariantByID = async (variantId) => {
+    return await Variant.where({
+        'id': parseInt(variantId)
+    }).fetch({
+        require: false,
+        withRelated: ['product', 'color']
+    });
+}
+
+const getAllColors = async () => {
+    return await Color.fetchAll().map((color) => {
+        return [color.get('id'), color.get('name')]
+    });
+}
+
 module.exports = {
-    getAllMaterials, getAllBrands, getAllCategories, getAllFeatures, getProductByID
+    getAllMaterials, 
+    getAllBrands, 
+    getAllCategories, 
+    getAllFeatures, 
+    getProductByID,
+    getVariantsByProductID,
+    getVariantByID,
+    getAllColors
 }
