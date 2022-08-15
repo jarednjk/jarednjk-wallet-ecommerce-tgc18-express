@@ -95,21 +95,8 @@ const createProductForm = (materials, brands, categories, features) => {
     })
 };
 
-const createVariantForm = (products, colors) => {
+const createVariantForm = (colors) => {
     return forms.create({
-        stock: fields.string({
-            required: true,
-            errorAfterField: true,
-            validators: [validators.integer(), validators.min(0)]
-        }),
-        image_url: fields.string({
-            required: true,
-            errorAfterField: true,
-        }),
-        thumbnail_url: fields.string({
-            required: true,
-            errorAfterField: true,
-        }),
         color_id: fields.string({
             label: 'Color',
             required: true,
@@ -117,12 +104,16 @@ const createVariantForm = (products, colors) => {
             widget: widgets.select(),
             choices: colors
         }),
-        product_id: fields.string({
-            label: 'Product',
+        stock: fields.string({
             required: true,
             errorAfterField: true,
-            widget: widgets.select(),
-            choices: products
+            validators: [validators.integer(), validators.min(0)]
+        }),
+        image_url: fields.string({
+            widget: widgets.hidden()
+        }),
+        thumbnail_url: fields.string({
+            widget: widgets.hidden()
         }),
     })
 }

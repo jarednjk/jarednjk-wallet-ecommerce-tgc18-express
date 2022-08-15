@@ -40,10 +40,10 @@ router.post('/create', checkIfAuthenticated, async (req, res) => {
 
     productForm.handle(req, {
         'success': async (form) => {
-            let {features, ...productData} = form.data;
+            let { features, ...productData } = form.data;
             const product = new Product(productData);
             await product.save();
-            
+
             if (features) {
                 await product.features().attach(features.split(","));
             }
@@ -113,7 +113,7 @@ router.post('/:product_id/update', checkIfAuthenticated, async (req, res) => {
             let existingFeatureIds = await product.related('features').pluck('id');
 
             // remove all features that aren't selected
-            let toRemove = existingFeatureIds.filter( id => featureIds.includes(id) === false);
+            let toRemove = existingFeatureIds.filter(id => featureIds.includes(id) === false);
             await product.features().detach(toRemove);
 
             // add in all the features select in form
@@ -171,11 +171,8 @@ router.get('/:product_id/variants', async (req, res) => {
 })
 
 router.get('/:product_id/variants/create', async (req, res) => {
-    const product = await Product.where({
-        'id': req.params.product_id
-    }).fetch({
-        require: true
-    })
+    const productId = req.params.product_id;
+    const product = await dataLayer.getProductByID(productId);
 
     const allColors = await Color.fetchAll().map((color) => {
         return [color.get('id'), color.get('name')]
@@ -183,8 +180,40 @@ router.get('/:product_id/variants/create', async (req, res) => {
 
     const variantForm = createVariantForm(allColors);
 
-    res.render('variants/create', {
-        
+    res.render('products/variants-create', {
+        product: product.toJSON(),
+        variantForm: variantForm.toHTML(bootstrapField)
+    })
+})
+
+router.post('/:product_id/variants/create', async (req, res) => {
+    const productId = req.params.product_id;
+    const product = await dataLayer.getProductByID(productId);
+
+    const allColors = await Color.fetchAll().map((color) => {
+        return [color.get('id'), color.get('name')]
+    })
+
+    const variantForm = createVariantForm(allColors);
+
+    variantForm.handle(req, {
+        'success': async (form) => {
+            const variant = new Variant({
+                product_id: productId,
+                color_id: form.data.color_id,
+                stock: form.data.stock,
+            });
+            await variant.save();
+
+            req.flash('success_messages', `New color variant of "${product.get('name')}" has been created!`)
+            res.redirect(`/products/${req.params.product_id}/variants`)
+        },
+        'error': async (form) => {
+            res.render('products/variants-create', {
+                product: product.toJSON(),
+                variantForm: form.toHTML(bootstrapField)
+            })
+        }
     })
 })
 

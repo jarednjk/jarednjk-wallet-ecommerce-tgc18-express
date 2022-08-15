@@ -81,7 +81,7 @@
 </table>
 
 <h2 class="display-6 pt-5">Color Variants</h2>
-<table class="table">
+<table class="table table-hover">
     <thead>
         <tr class="table-dark border-dark">
             <th>Image</th>
@@ -93,7 +93,7 @@
     </thead>
     <tbody>
         {{#each variants}}
-        <tr class="table-secondary">
+        <tr>
             <td>
             
             </td>
@@ -107,13 +107,13 @@
                 <div class="d-flex">
                     <a class="rounded me-1" href="/products/{{this.id}}/update" style="background-color:black"
                         onMouseOver="this.style.backgroundColor='white'"
-                        onMouseOut="this.style.backgroundColor='black'"><big><i class="bi bi-pencil-square p-1"
+                        onMouseOut="this.style.backgroundColor='black'"><big><i class="bi bi-pencil-square p-2"
                                 style="color:white" onMouseOver="this.style.color='black'"
                                 onMouseOut="this.style.color='white'"></i></big></a>
 
                     <a class="rounded" href="/products/{{this.id}}/delete" style="background-color:black"
                         onMouseOver="this.style.backgroundColor='white'"
-                        onMouseOut="this.style.backgroundColor='black'"><big><i class="bi bi-trash3-fill p-1"
+                        onMouseOut="this.style.backgroundColor='black'"><big><i class="bi bi-trash3-fill p-2"
                                 style="color:white" onMouseOver="this.style.color='black'"
                                 onMouseOut="this.style.color='white'"></i></big></a>
                 </div>
