@@ -158,7 +158,6 @@ router.get('/:product_id/variants', async (req, res) => {
     const product = await dataLayer.getProductByID(productId);
 
     const variants = await dataLayer.getVariantsByProductID(productId);
-
     res.render('products/variants', {
         product: product.toJSON(),
         variants: variants.toJSON()
@@ -196,8 +195,10 @@ router.post('/:product_id/variants/create', async (req, res) => {
             });
             await variant.save();
 
-            req.flash('success_messages', `New color variant of "${product.get('name')}" has been created!`);
-            res.redirect(`/products/${req.params.product_id}/variants`);
+            const color = await dataLayer.getColorByID(form.data.color_id);
+
+            req.flash('success_messages', `New color variant "${color.get('name')}" has been created!`);
+            res.redirect(`/products/${productId}/variants`);
         },
         'error': async (form) => {
             res.render('products/variants-create', {
@@ -229,15 +230,16 @@ router.post('/:product_id/variants/:variant_id/update', async (req, res) => {
     const variant = await dataLayer.getVariantByID(variantId);
 
     const allColors = await dataLayer.getAllColors();
-
     const variantForm = createVariantForm(allColors);
 
     variantForm.handle(req, {
         'success': async (form) => {
             variant.set(form.data);
             variant.save();
+            const color = await dataLayer.getColorByID(form.data.color_id);
 
-            req.flash('success_messages', `Color variant has been updated!`);
+            req.flash('success_messages', `Color variant "${color.get('name')}" has been updated!`);
+
             res.redirect(`/products/${req.params.product_id}/variants`);
         },
         'error': async (form) => {
@@ -247,6 +249,25 @@ router.post('/:product_id/variants/:variant_id/update', async (req, res) => {
             })
         }
     })
+})
+
+router.get('/:product_id/variants/:variant_id/delete', async (req, res) => {
+    const variantId = req.params.variant_id;
+    const variant = await dataLayer.getVariantByID(variantId);
+
+    res.render('products/variants-delete', {
+        'variant': variant.toJSON()
+    })
+})
+
+router.post('/:product_id/variants/:variant_id/delete', async (req, res) => {
+    const variantId = req.params.variant_id;
+    const variant = await dataLayer.getVariantByID(variantId);
+
+    await variant.destroy();
+
+    req.flash('success_messages', `Color variant has been deleted!`);
+    res.redirect(`/products/${req.params.product_id}/variants`);
 })
 
 module.exports = router;

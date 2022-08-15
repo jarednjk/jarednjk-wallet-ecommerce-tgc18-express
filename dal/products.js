@@ -34,9 +34,11 @@ const getProductByID = async (productId) => {
 }
 
 const getVariantsByProductID = async (productId) => {
-    return await Variant.where({
-        'id': parseInt(productId)
-    }).fetchAll({
+    return await Variant
+    .where({
+        'product_id': parseInt(productId)
+    })
+    .fetchAll({
         require: false,
         withRelated: ['product', 'color']
     })
@@ -57,6 +59,15 @@ const getAllColors = async () => {
     });
 }
 
+const getColorByID = async (colorId) => {
+    return await Color.where({
+        'id': parseInt(colorId)
+    }).fetch({
+        require: false,
+        withRelated: ['variants']
+    })
+}
+
 module.exports = {
     getAllMaterials, 
     getAllBrands, 
@@ -65,5 +76,6 @@ module.exports = {
     getProductByID,
     getVariantsByProductID,
     getVariantByID,
-    getAllColors
+    getAllColors,
+    getColorByID
 }

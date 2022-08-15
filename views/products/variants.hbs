@@ -1,15 +1,8 @@
 {{#extends 'base'}}
 
 {{#block 'content'}}
-<div class="d-flex justify-content-end">
-    <a class="rounded text-decoration-none py-1" href="/products/create" style="background-color:black"
-        onMouseOver="this.style.backgroundColor='white'" onMouseOut="this.style.backgroundColor='black'">
-        <span class="p-2" style="color:white" onMouseOver="this.style.color='black'"
-            onMouseOut="this.style.color='white'">Add Product</span>
-    </a>
-</div>
 
-<h2 class="display-6 pt-3">Product</h2>
+<h2 class="display-6 pt-5">Product</h2>
 <table class="table">
     <thead>
         <tr class="table-dark border-dark">
@@ -23,7 +16,6 @@
             <th>Brand</th>
             <th>Category</th>
             <th>Features</th>
-            {{!-- <th>Actions</th> --}}
         </tr>
 
     </thead>
@@ -61,32 +53,25 @@
                 <span class="badge bg-primary">{{this.name}}</span>
                 {{/each}}
             </td>
-            {{!-- <td>
-                <div class="d-flex">
-                    <a class="rounded me-1" href="/products/{{this.id}}/update" style="background-color:black"
-                        onMouseOver="this.style.backgroundColor='white'"
-                        onMouseOut="this.style.backgroundColor='black'"><big><i class="bi bi-pencil-square p-1"
-                                style="color:white" onMouseOver="this.style.color='black'"
-                                onMouseOut="this.style.color='white'"></i></big></a>
-
-                    <a class="rounded" href="/products/{{this.id}}/delete" style="background-color:black"
-                        onMouseOver="this.style.backgroundColor='white'"
-                        onMouseOut="this.style.backgroundColor='black'"><big><i class="bi bi-trash3-fill p-1"
-                                style="color:white" onMouseOver="this.style.color='black'"
-                                onMouseOut="this.style.color='white'"></i></big></a>
-                </div>
-            </td> --}}
         </tr>
     </tbody>
 </table>
 
-<h2 class="display-6 pt-5">Color Variants</h2>
-<table class="table table-hover">
+<div class="d-flex justify-content-between align-items-end">
+    <h2 class="display-6 pt-5">Product Variants</h2>
+
+    <a class="rounded text-decoration-none py-1 mb-2" href="/products/{{product.id}}/variants/create" style="background-color:black"
+        onMouseOver="this.style.backgroundColor='white'" onMouseOut="this.style.backgroundColor='black'">
+        <span class="p-3" style="color:white" onMouseOver="this.style.color='black'"
+            onMouseOut="this.style.color='white'"><big>Add Variant</big></span>
+    </a>
+</div><table class="table table-hover">
     <thead>
         <tr class="table-dark border-dark">
             <th>Image</th>
             <th>Color</th>
             <th>Stock</th>
+            {{!-- <th>Date Created</th> --}}
             <th>Actions</th>
         </tr>
 
@@ -95,7 +80,7 @@
         {{#each variants}}
         <tr>
             <td>
-            
+
             </td>
             <td>
                 {{this.color.name}}
@@ -103,19 +88,24 @@
             <td>
                 {{this.stock}}
             </td>
+            {{!-- <td>
+                {{this.date_created}}
+            </td> --}}
             <td>
                 <div class="d-flex">
-                    <a class="rounded me-1" href="/products/{{this.product_id}}/variants/{{this.id}}/update" style="background-color:black"
-                        onMouseOver="this.style.backgroundColor='white'"
+                    <a class="rounded me-1" href="/products/{{this.product_id}}/variants/{{this.id}}/update"
+                        style="background-color:black" onMouseOver="this.style.backgroundColor='white'"
                         onMouseOut="this.style.backgroundColor='black'"><big><i class="bi bi-pencil-square p-2"
                                 style="color:white" onMouseOver="this.style.color='black'"
                                 onMouseOut="this.style.color='white'"></i></big></a>
 
-                    <a class="rounded" href="/products/{{this.product_id}}/variants/{{this.id}}/delete" style="background-color:black"
-                        onMouseOver="this.style.backgroundColor='white'"
+                    <a class="rounded" href="/products/{{this.product_id}}/variants/{{this.id}}/delete"
+                        style="background-color:black" onMouseOver="this.style.backgroundColor='white'"
                         onMouseOut="this.style.backgroundColor='black'"><big><i class="bi bi-trash3-fill p-2"
                                 style="color:white" onMouseOver="this.style.color='black'"
                                 onMouseOut="this.style.color='white'"></i></big></a>
+
+                    
                 </div>
             </td>
         </tr>

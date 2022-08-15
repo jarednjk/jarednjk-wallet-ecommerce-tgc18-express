@@ -13,6 +13,9 @@ const Product = bookshelf.model('Product', {
     },
     features() {
         return this.belongsToMany('Feature');
+    },
+    variants() {
+        return this.hasMany('Variant');
     }
 })
 
