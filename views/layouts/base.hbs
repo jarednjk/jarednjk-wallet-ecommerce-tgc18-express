@@ -38,8 +38,17 @@
                 </div>
 
             </div>
-            <a href="/users/login" class="btn btn-dark d-none d-lg-block me-2">Login</a>
-            <a href="/users/register" class="btn btn-primary cta-button d-none d-lg-block me-2">Register</a>
+            {{#if user}}
+            <div class="d-flex align-items-center">
+                <span class="d-none d-lg-block"><big><i class="bi bi-person-circle"></i></big> {{user.first_name}} {{user.last_name}}</span>
+                <a href="/users/logout" class="btn btn-primary cta-button d-none d-lg-block ms-3">Logout</a>
+            </div>
+            {{else}}
+            <div class="d-flex">
+                <a href="/users/login" class="btn btn-dark d-none d-lg-block me-2">Login</a>
+                <a href="/users/register" class="btn btn-primary cta-button d-none d-lg-block">Register</a>
+            </div>
+            {{/if}}
         </div>
     </nav>
     <div class="container">
@@ -64,8 +73,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
         crossorigin="anonymous"></script>
-        {{#block 'js'}}
-        {{/block}}
+    {{#block 'js'}}
+    {{/block}}
 </body>
 
 </html>

@@ -3,10 +3,12 @@
 <div class="border border-dark rounded mx-auto px-4 my-5 shadow" style="max-width: 350px">
     <h2 class="pt-3">Register</h2>
     <p class="pb-2 lead text-muted">Let's get you onboard</p>
-    <form method="POST" class="mb-2">
-        <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
+    <form method="POST">
+        <input type="hidden" name="_csrf" value="{{csrfToken}}" />
         {{{form}}}
-        <input type="submit" value="Register" class="cta-button my-3 btn btn-dark" />
+        <div class="d-flex justify-content-end">
+            <input type="submit" value="Register" class="cta-button mt-2 mb-4 btn btn-dark" />
+        </div>
     </form>
 </div>
 
