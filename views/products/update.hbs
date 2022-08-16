@@ -1,14 +1,16 @@
 {{#extends 'base'}}
 
 {{#block 'content'}}
-<div class="border border-dark rounded mx-auto px-4 my-5 shadow" style="max-width: 500px">
-    <h2 class="display-6 pt-3 pb-1">Update Product</h2>
+<div class="border border-dark rounded mx-auto px-4 my-5 shadow" style="max-width: 450px">
+    <h2 class="display-6 pt-3 pb-1">Edit Product</h2>
     {{!-- <p class="pb-1 lead text-muted">{{product.name}} (Product ID: #{{product.id}})</p> --}}
     <form method="POST">
         <input type="hidden" name="_csrf" value="{{csrfToken}}" />
         {{{form}}}
-        <a href="/products" class="btn btn-outline-secondary">Cancel</a>
-        <input type="submit" value="Update Product" class="my-3 btn btn-dark" />
+        <div class="text-end">
+            <a href="/products" class="btn btn-outline-secondary">Cancel</a>
+            <input type="submit" value="Update Product" class="my-3 btn btn-dark" />
+        </div>
     </form>
 </div>
 

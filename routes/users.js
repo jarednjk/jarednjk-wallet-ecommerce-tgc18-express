@@ -81,7 +81,7 @@ router.post('/login', async (req, res) => {
                 }
             }
         }, 'error': (form) => {
-            req.flash('error_messages', "There are some problems logging you in. Please fill in the form again");
+            req.flash('error_messages', "There are some problems logging you in. Please fill in the form.");
             res.render('users/login', {
                 'form': form.toHTML(bootstrapField)
             })

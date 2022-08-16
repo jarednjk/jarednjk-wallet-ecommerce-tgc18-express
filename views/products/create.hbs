@@ -1,13 +1,15 @@
 {{#extends 'base'}}
 
 {{#block 'content'}}
-<div class="border border-dark rounded mx-auto px-4 my-4 shadow" style="max-width: 500px">
-    <h2 class="display-6 py-3">Add New Product</h2>
+<div class="border border-dark rounded mx-auto px-4 my-5 shadow" style="max-width: 450px">
+    <h2 class="display-6 pt-3 pb-1">Add New Product</h2>
     <form method="POST">
         <input type="hidden" name="_csrf" value="{{csrfToken}}" />
         {{{form}}}
-        <a href="/products" class="btn btn-outline-secondary">Cancel</a>
-        <input type="submit" value="Add Product" class="btn btn-dark my-4" />
+        <div class="text-end">
+            <a href="/products" class="btn btn-outline-secondary">Cancel</a>
+            <input type="submit" value="Add Product" class="btn btn-dark my-4" />
+        </div>
     </form>
 </div>
 {{/block}}

@@ -27,66 +27,69 @@ var bootstrapField = function (name, object) {
 const createProductForm = (materials, brands, categories, features) => {
     return forms.create({
         name: fields.string({
+            label: 'Name:',
             required: true,
             errorAfterField: true,
         }),
         cost: fields.string({
-            label: 'Cost (SGD)',
+            label: 'Cost (SGD):',
             required: true,
             errorAfterField: true,
             validators: [validators.integer(), validators.min(0)]
         }),
         description: fields.string({
+            label: 'Description:',
             required: true,
             errorAfterField: true,
         }),
         weight: fields.string({
-            label: 'Weight (g)',
+            label: 'Weight (g):',
             required: true,
             validators: [validators.integer(), validators.min(0)]
         }),
         length: fields.string({
-            label: 'Length (mm)',
+            label: 'Length (mm):',
             required: true,
             validators: [validators.integer(), validators.min(0)]
         }),
         width: fields.string({
-            label: 'Width (mm)',
+            label: 'Width (mm):',
             required: true,
             validators: [validators.integer(), validators.min(0)]
         }),
         height: fields.string({
-            label: 'Height (mm)',
+            label: 'Height (mm):',
             required: true,
             validators: [validators.integer(), validators.min(0)]
         }),
         card_slot: fields.string({
-            label: 'Card Slot',
+            label: 'Card Slot:',
             required: true,
             validators: [validators.integer(), validators.min(0)]
         }),
         material_id: fields.string({
-            label: 'Material',
+            label: 'Material:',
             required: true,
             errorAfterField: true,
             widget: widgets.select(),
             choices: materials
         }),
         brand_id: fields.string({
-            label: 'Brand',
+            label: 'Brand:',
             required: true,
             errorAfterField: true,
             widget: widgets.select(),
             choices: brands
         }),
         category_id: fields.string({
-            label: 'Category',
+            label: 'Category:',
             required: true,
             errorAfterField: true,   
             widget: widgets.select(),
             choices: categories
         }),
         features: fields.string({
+            label: 'Features:',
             required: true,
             errorAfterField: true,
             widget: widgets.multipleSelect(),
@@ -98,13 +101,14 @@ const createProductForm = (materials, brands, categories, features) => {
 const createVariantForm = (colors) => {
     return forms.create({
         color_id: fields.string({
-            label: 'Color',
+            label: 'Color:',
             required: true,
             errorAfterField: true,
             widget: widgets.select(),
             choices: colors
         }),
         stock: fields.string({
+            label: 'Stock:',
             required: true,
             errorAfterField: true,
             validators: [validators.integer(), validators.min(0)]

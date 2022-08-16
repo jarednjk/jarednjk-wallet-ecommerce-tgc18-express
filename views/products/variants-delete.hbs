@@ -1,8 +1,8 @@
 {{#extends 'base'}}
 
 {{#block 'content'}}
-<h2 class="pt-5 display-6">Delete Product Variant</h2>
-<p class="pb-2 lead text-muted">Color: {{variant.color.name}}</p>
+<h2 class="pt-4 display-6">Delete {{variant.color.name}} Variant</h2>
+<p class="pb-3 lead text-muted">{{product.name}} (Product ID: #{{product.id}})</p>
 
 <form method="POST">
     <input type="hidden" name="_csrf" value="{{csrfToken}}" />
@@ -20,19 +20,21 @@
             <tbody>
                 <tr class="table-light">
                     <td>
-
+                        <img src="{{variant.thumbnail_url}}" />
                     </td>
-                    <td>
+                    <td class="pt-4">
                         {{variant.color.name}}
                     </td>
-                    <td>
+                    <td class="pt-4">
                         {{variant.stock}}
                     </td>
                 </tr>
             </tbody>
         </table>
-        <a href="/products/{{variant.product_id}}/variants" class="btn btn-outline-secondary">Cancel</a>
-        <input type="submit" class="btn btn-danger" value="Delete Variant" />
+        <div class="text-end">
+            <a href="/products/{{variant.product_id}}/variants" class="btn btn-outline-secondary">Cancel</a>
+            <input type="submit" class="btn btn-danger" value="Delete Variant" />
+        </div>
     </div>
 </form>
 {{/block}}

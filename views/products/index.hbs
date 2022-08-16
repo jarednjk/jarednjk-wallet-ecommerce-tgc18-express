@@ -3,19 +3,19 @@
 {{#block 'content'}}
 
 <div class="d-flex justify-content-between align-items-end">
-    <h2 class="display-6 pt-5">All Products</h2>
+    <h2 class="display-6 pt-4">All Products</h2>
 
     <a class="rounded text-decoration-none py-1 mb-2" href="/products/create" style="background-color:black"
         onMouseOver="this.style.backgroundColor='white'" onMouseOut="this.style.backgroundColor='black'">
         <span class="p-3" style="color:white" onMouseOver="this.style.color='black'"
-            onMouseOut="this.style.color='white'"><big>Add Product</big></span>
+            onMouseOut="this.style.color='white'">Add Product</span>
     </a>
 </div>
 
 
 
 <table class="table table-hover">
-    <thead>
+    <thead class="table-dark">
         <tr>
             <th>Product ID</th>
             <th>Product Name</th>
@@ -76,11 +76,6 @@
                     </a>
                 </div>
                 <div class="d-flex">
-                    {{!-- <a class="rounded" href="/products/{{this.id}}/variants" style="background-color:black"
-                        onMouseOver="this.style.backgroundColor='white'"
-                        onMouseOut="this.style.backgroundColor='black'"><big><i class="bi bi-files p-1"
-                                style="color:white" onMouseOver="this.style.color='black'"
-                                onMouseOut="this.style.color='white'"></i></big></a> --}}
 
                     <a class="rounded me-1" href="/products/{{this.id}}/update" style="background-color:black"
                         onMouseOver="this.style.backgroundColor='white'"

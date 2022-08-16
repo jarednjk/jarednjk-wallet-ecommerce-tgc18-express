@@ -174,7 +174,10 @@ router.get('/:product_id/variants/create', async (req, res) => {
 
     res.render('products/variants-create', {
         product: product.toJSON(),
-        variantForm: variantForm.toHTML(bootstrapField)
+        variantForm: variantForm.toHTML(bootstrapField),
+        cloudinaryName: process.env.CLOUDINARY_NAME,
+        cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+        cloudinaryPreset: process.env.CLOUDINARY_UPLOAD_PRESET
     })
 })
 
@@ -192,6 +195,8 @@ router.post('/:product_id/variants/create', async (req, res) => {
                 product_id: productId,
                 color_id: form.data.color_id,
                 stock: form.data.stock,
+                image_url: form.data.image_url,
+                thumbnail_url: form.data.thumbnail_url
             });
             await variant.save();
 
@@ -210,18 +215,26 @@ router.post('/:product_id/variants/create', async (req, res) => {
 })
 
 router.get('/:product_id/variants/:variant_id/update', async (req, res) => {
+    const productId = req.params.product_id;
+    const product = await dataLayer.getProductByID(productId);
     const variantId = req.params.variant_id;
     const variant = await dataLayer.getVariantByID(variantId);
 
     const allColors = await dataLayer.getAllColors();
     
+
     const variantForm = createVariantForm(allColors);
     variantForm.fields.stock.value = variant.get('stock');
-
+    variantForm.fields.image_url.value = variant.get('image_url');
+    variantForm.fields.thumbnail_url.value = variant.get('thumbnail_url');
 
     res.render('products/variants-update', {
+        product: product.toJSON(),
         variant: variant.toJSON(),
-        variantForm: variantForm.toHTML(bootstrapField)
+        variantForm: variantForm.toHTML(bootstrapField),
+        cloudinaryName: process.env.CLOUDINARY_NAME,
+        cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+        cloudinaryPreset: process.env.CLOUDINARY_UPLOAD_PRESET
     })
 })
 
@@ -245,18 +258,24 @@ router.post('/:product_id/variants/:variant_id/update', async (req, res) => {
         'error': async (form) => {
             res.render('products/variants-create', {
                 variant: variant.toJSON(),
-                variantForm: form.toHTML(bootstrapField)
+                variantForm: form.toHTML(bootstrapField),
+                cloudinaryName: process.env.CLOUDINARY_NAME,
+                cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+                cloudinaryPreset: process.env.CLOUDINARY_UPLOAD_PRESET
             })
         }
     })
 })
 
 router.get('/:product_id/variants/:variant_id/delete', async (req, res) => {
+    const productId = req.params.product_id;
+    const product = await dataLayer.getProductByID(productId);
     const variantId = req.params.variant_id;
     const variant = await dataLayer.getVariantByID(variantId);
 
     res.render('products/variants-delete', {
-        'variant': variant.toJSON()
+        product: product.toJSON(),
+        variant: variant.toJSON()
     })
 })
 

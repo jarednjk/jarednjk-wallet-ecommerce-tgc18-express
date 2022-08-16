@@ -2,10 +2,10 @@
 
 {{#block 'content'}}
 
-<h2 class="display-6 pt-5">Product</h2>
+<h2 class="display-6 pt-4">Product</h2>
 <table class="table">
     <thead>
-        <tr class="table-dark border-dark">
+        <tr class="table-dark">
             <th>Product ID</th>
             <th>Product Name</th>
             <th>Description</th>
@@ -58,16 +58,18 @@
 </table>
 
 <div class="d-flex justify-content-between align-items-end">
-    <h2 class="display-6 pt-5">Product Variants</h2>
+    <h2 class="display-6 pt-3">Product Variants</h2>
 
-    <a class="rounded text-decoration-none py-1 mb-2" href="/products/{{product.id}}/variants/create" style="background-color:black"
-        onMouseOver="this.style.backgroundColor='white'" onMouseOut="this.style.backgroundColor='black'">
+    <a class="rounded text-decoration-none py-1 mb-2" href="/products/{{product.id}}/variants/create"
+        style="background-color:black" onMouseOver="this.style.backgroundColor='white'"
+        onMouseOut="this.style.backgroundColor='black'">
         <span class="p-3" style="color:white" onMouseOver="this.style.color='black'"
-            onMouseOut="this.style.color='white'"><big>Add Variant</big></span>
+            onMouseOut="this.style.color='white'">Add Variant</span>
     </a>
-</div><table class="table table-hover">
+</div>
+<table class="table table-hover">
     <thead>
-        <tr class="table-dark border-dark">
+        <tr class="table-dark">
             <th>Image</th>
             <th>Color</th>
             <th>Stock</th>
@@ -80,18 +82,18 @@
         {{#each variants}}
         <tr>
             <td>
-
+                <img src="{{this.thumbnail_url}}" />
             </td>
-            <td>
+            <td class="pt-4">
                 {{this.color.name}}
             </td>
-            <td>
+            <td class="pt-4">
                 {{this.stock}}
             </td>
             {{!-- <td>
                 {{this.date_created}}
             </td> --}}
-            <td>
+            <td class="pt-4">
                 <div class="d-flex">
                     <a class="rounded me-1" href="/products/{{this.product_id}}/variants/{{this.id}}/update"
                         style="background-color:black" onMouseOver="this.style.backgroundColor='white'"
@@ -105,7 +107,7 @@
                                 style="color:white" onMouseOver="this.style.color='black'"
                                 onMouseOut="this.style.color='white'"></i></big></a>
 
-                    
+
                 </div>
             </td>
         </tr>

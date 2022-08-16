@@ -1,8 +1,8 @@
 {{#extends 'base'}}
 
 {{#block 'content'}}
-<h2 class="pt-5 display-6">Delete Product</h2>
-<p class="pb-2 lead text-muted">{{product.name}} (Product ID: #{{product.id}})</p>
+<h2 class="pt-4 display-6">Delete Product</h2>
+<p class="pb-3 lead text-muted">{{product.name}} (Product ID: #{{product.id}})</p>
 
 <form method="POST">
     <input type="hidden" name="_csrf" value="{{csrfToken}}" />
@@ -61,8 +61,10 @@
                 </tr>
             </tbody>
         </table>
-        <a href="/products" class="btn btn-outline-secondary">Cancel</a>
-        <input type="submit" class="btn btn-danger" value="Delete Product" />
+        <div class="text-end">
+            <a href="/products" class="btn btn-outline-secondary">Cancel</a>
+            <input type="submit" class="btn btn-danger" value="Delete Product" />
+        </div>
     </div>
 </form>
 {{/block}}
