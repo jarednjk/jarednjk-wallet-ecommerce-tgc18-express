@@ -1,6 +1,6 @@
 {{#extends 'base'}}
 {{#block 'content'}}
-<div class="border border-dark rounded mx-auto px-4 shadow my-5" style="max-width: 450px">
+<div class="border border-dark rounded mx-auto px-4 shadow my-4" style="max-width: 450px">
     <h2 class="display-6 pt-3">Edit {{variant.color.name}} Variant</h2>
     <p class="pb-2 lead text-muted">{{product.name}} (Product ID: #{{product.id}})</p>
     
@@ -17,7 +17,7 @@
             {{/if}}
         </div>
         <div>
-            <a href="#" class="btn btn-primary btn-sm" id="upload_widget">Edit Image</a>
+            <a href="#" class="btn btn-primary btn-sm" id="upload_widget"><i class="bi bi-cloud-arrow-up-fill"></i> Re-upload</a>
         </div>
 
         <div class="text-end">

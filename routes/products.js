@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { bootstrapField, createProductForm, createVariantForm } = require('../forms');
+const { bootstrapField, createProductForm, createSearchForm, createVariantForm } = require('../forms');
 const { checkIfAuthenticated } = require('../middlewares');
 const dataLayer = require('../dal/products');
 
@@ -8,19 +8,89 @@ const dataLayer = require('../dal/products');
 const { Product, Material, Brand, Category, Feature, Variant, Color } = require('../models')
 
 router.get('/', checkIfAuthenticated, async (req, res) => {
-    // #2 - fetch all the products (ie, SELECT * from products)
-    let products = await Product.collection().fetch({
-        withRelated: ['material', 'brand', 'category', 'features']
-    });
-    res.render('products/index', {
-        'products': products.toJSON() // #3 - convert collection to JSON
+    // // #2 - fetch all the products (ie, SELECT * from products)
+    // let products = await Product.collection().fetch({
+    //     withRelated: ['material', 'brand', 'category', 'features']
+    // });
+    // res.render('products/index', {
+    //     'products': products.toJSON() // #3 - convert collection to JSON
+    // })
+
+    const allMaterials = await dataLayer.getAllMaterials();
+    allMaterials.unshift([0, '----']);
+    const allBrands = await dataLayer.getAllBrands();
+    allBrands.unshift([0, '----']);
+    const allCategories = await dataLayer.getAllCategories();
+    allCategories.unshift([0, '----']);
+    const allFeatures = await dataLayer.getAllFeatures();
+
+    const searchForm = createSearchForm(allMaterials, allBrands, allCategories, allFeatures);
+    let q = Product.collection();
+
+    searchForm.handle(req, {
+        'empty': async (form) => {
+            let products = await q.fetch({
+                withRelated: ['material', 'brand', 'category', 'features']
+            })
+            res.render('products/index', {
+                'products': products.toJSON(),
+                'form': form.toHTML(bootstrapField)
+            })
+
+        },
+        'error': async (form) => {
+            let products = await q.fetch({
+                withRelated: ['material', 'brand', 'category', 'features']
+            })
+            res.render('products/index', {
+                'products': products.toJSON(),
+                'form': form.toHTML(bootstrapField)
+            })
+        },
+        'success': async (form) => {
+            if (form.data.name) {
+                q.where('name', 'like', '%' + form.data.name + '%')
+            }
+            if (form.data.min_cost) {
+                q.where('cost', '>=', form.data.min_cost)
+            }
+            if (form.data.max_cost) {
+                q.where('cost', '<=', form.data.max_cost)
+            }
+            if (form.data.min_card_slot) {
+                q.where('weight', '>=', form.data.min_card_slot)
+            }
+            if (form.data.max_card_slot) {
+                q.where('weight', '<=', form.data.max_card_slot)
+            }
+            if (form.data.material_id && form.data.material_id != "0") {
+                q.where('material_id', '=', form.data.material_id)
+            }
+            if (form.data.category_id && form.data.category_id != "0") {
+                q.where('category_id', '=', form.data.category_id)
+            }
+            if (form.data.brand_id && form.data.brand_id != "0") {
+                q.where('brand_id', '=', form.data.brand_id)
+            }
+            let products = await q.fetch({
+                withRelated: ['material', 'brand', 'category', 'features']
+            })
+            res.render('products/index', {
+                products: products.toJSON(),
+                form: form.toHTML(bootstrapField)
+            })
+        }
     })
+
 })
 
 router.get('/create', checkIfAuthenticated, async (req, res) => {
     const allMaterials = await dataLayer.getAllMaterials();
+    allMaterials.unshift([0, '----']);
     const allBrands = await dataLayer.getAllBrands();
+    allBrands.unshift([0, '----']);
     const allCategories = await dataLayer.getAllCategories();
+    allCategories.unshift([0, '----']);
     const allFeatures = await dataLayer.getAllFeatures();
 
     const productForm = createProductForm(allMaterials, allBrands, allCategories, allFeatures);
@@ -73,7 +143,6 @@ router.get('/:product_id/update', checkIfAuthenticated, async (req, res) => {
     productForm.fields.name.value = product.get('name');
     productForm.fields.cost.value = product.get('cost');
     productForm.fields.description.value = product.get('description');
-    productForm.fields.weight.value = product.get('weight');
     productForm.fields.length.value = product.get('length');
     productForm.fields.width.value = product.get('width');
     productForm.fields.height.value = product.get('height');
@@ -196,7 +265,8 @@ router.post('/:product_id/variants/create', async (req, res) => {
                 color_id: form.data.color_id,
                 stock: form.data.stock,
                 image_url: form.data.image_url,
-                thumbnail_url: form.data.thumbnail_url
+                thumbnail_url: form.data.thumbnail_url,
+                date_updated: new Date()
             });
             await variant.save();
 
@@ -221,7 +291,7 @@ router.get('/:product_id/variants/:variant_id/update', async (req, res) => {
     const variant = await dataLayer.getVariantByID(variantId);
 
     const allColors = await dataLayer.getAllColors();
-    
+
 
     const variantForm = createVariantForm(allColors);
     variantForm.fields.stock.value = variant.get('stock');
@@ -248,6 +318,7 @@ router.post('/:product_id/variants/:variant_id/update', async (req, res) => {
     variantForm.handle(req, {
         'success': async (form) => {
             variant.set(form.data);
+            variant.set('date_updated', new Date());
             variant.save();
             const color = await dataLayer.getColorByID(form.data.color_id);
 

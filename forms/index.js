@@ -42,11 +42,6 @@ const createProductForm = (materials, brands, categories, features) => {
             required: true,
             errorAfterField: true,
         }),
-        weight: fields.string({
-            label: 'Weight (g):',
-            required: true,
-            validators: [validators.integer(), validators.min(0)]
-        }),
         length: fields.string({
             label: 'Length (mm):',
             required: true,
@@ -161,4 +156,62 @@ const createLoginForm = () => {
     })
 }
 
-module.exports = { createProductForm, createRegistrationForm, createLoginForm, createVariantForm, bootstrapField };
+const createSearchForm = (materials, brands, categories, features) => {
+    return forms.create({
+        name: fields.string({
+            label: 'Name',
+            required: false,
+            errorAfterField: true,
+        }),
+        'min_cost': fields.string({
+            required: false,
+            errorAfterField: true,
+            'validators': [validators.integer()]
+        }),
+        'max_cost': fields.string({
+            required: false,
+            errorAfterField: true,
+            validators: [validators.integer()]
+        }),
+        'min_card_slot': fields.string({
+            required: false,
+            errorAfterField: true,
+            validators: [validators.integer(), validators.min(0)]
+        }),
+        'max_card_slot': fields.string({
+            required: false,
+            errorAfterField: true,
+            validators: [validators.integer(), validators.min(0)]
+        }),
+        material_id: fields.string({
+            label: 'Material',
+            required: false,
+            errorAfterField: true,
+            widget: widgets.select(),
+            choices: materials
+        }),
+        brand_id: fields.string({
+            label: 'Brand',
+            required: false,
+            errorAfterField: true,
+            widget: widgets.select(),
+            choices: brands
+        }),
+        category_id: fields.string({
+            label: 'Category',
+            required: false,
+            errorAfterField: true,   
+            widget: widgets.select(),
+            choices: categories
+        }),
+        features: fields.string({
+            label: 'Features',
+            required: false,
+            errorAfterField: true,
+            widget: widgets.multipleSelect(),
+            choices: features
+        })
+    })
+};
+
+module.exports = { createProductForm, createRegistrationForm, createLoginForm, createVariantForm, createSearchForm, bootstrapField };

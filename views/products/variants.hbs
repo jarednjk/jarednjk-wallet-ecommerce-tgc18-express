@@ -10,8 +10,8 @@
             <th>Product Name</th>
             <th>Description</th>
             <th>Cost (SGD)</th>
-            <th>Dimension(cm)<br />(L x W x H)</th>
-            <th>Weight (g)</th>
+            <th>Dimension (cm)</th>
+            <th>Card Slots</th>
             <th>Material</th>
             <th>Brand</th>
             <th>Category</th>
@@ -37,7 +37,7 @@
                 {{mmToCm product.length}} x {{mmToCm product.width}} x {{mmToCm product.height}}
             </td>
             <td>
-                {{product.weight}}
+                {{product.card_slot}}
             </td>
             <td>
                 {{product.material.name}}
@@ -73,7 +73,7 @@
             <th>Image</th>
             <th>Color</th>
             <th>Stock</th>
-            {{!-- <th>Date Created</th> --}}
+            <th>Date Updated</th>
             <th>Actions</th>
         </tr>
 
@@ -90,9 +90,9 @@
             <td class="pt-4">
                 {{this.stock}}
             </td>
-            {{!-- <td>
-                {{this.date_created}}
-            </td> --}}
+            <td class="pt-4">
+                {{this.date_updated}}
+            </td>
             <td class="pt-4">
                 <div class="d-flex">
                     <a class="rounded me-1" href="/products/{{this.product_id}}/variants/{{this.id}}/update"
