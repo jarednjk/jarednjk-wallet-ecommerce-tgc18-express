@@ -72,6 +72,10 @@ router.get('/', checkIfAuthenticated, async (req, res) => {
             if (form.data.brand_id && form.data.brand_id != "0") {
                 q.where('brand_id', '=', form.data.brand_id)
             }
+            if (form.data.features) {
+                q.query('join', 'features_products', 'products.id', 'product_id')
+                .where('feature_id', 'in', form.data.features.split(','))
+            }
             let products = await q.fetch({
                 withRelated: ['material', 'brand', 'category', 'features']
             })
