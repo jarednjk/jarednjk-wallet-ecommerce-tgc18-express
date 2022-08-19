@@ -68,6 +68,10 @@ const getColorByID = async (colorId) => {
     })
 }
 
+const getAllProducts = async () => {
+    return await Product.fetchAll();
+}
+
 module.exports = {
     getAllMaterials, 
     getAllBrands, 
@@ -77,5 +81,6 @@ module.exports = {
     getVariantsByProductID,
     getVariantByID,
     getAllColors,
-    getColorByID
+    getColorByID,
+    getAllProducts
 }
