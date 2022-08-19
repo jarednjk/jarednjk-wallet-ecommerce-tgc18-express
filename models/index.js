@@ -72,4 +72,14 @@ const User = bookshelf.model('User', {
     tableName: 'users'
 })
 
-module.exports = { Product, Material, Brand, Category, Feature, Variant, Color, Role, User };
+const CartItem = bookshelf.model('CartItem', {
+    tableName: 'cart_items',
+    variant() {
+        return this.belongsTo('Variant');
+    },
+    user() {
+        return this.belongsTo('User');
+    }
+}) 
+
+module.exports = { Product, Material, Brand, Category, Feature, Variant, Color, Role, User, CartItem };
