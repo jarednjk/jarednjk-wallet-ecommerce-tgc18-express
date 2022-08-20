@@ -34,12 +34,24 @@ app.use(session({
     secret: 'keyboard cat',
     resave: false,
     saveUninitialized: true
-  }))
+}))
 
 // enable CSRF
-app.use(csrf());
-app.use(function(req, res, next) {
-    res.locals.csrfToken = req.csrfToken();
+const csrfInstance = csrf();
+app.use(function (req, res, next) {
+    console.log("checking for csrf exclusion");
+    // exclude whatever URL we want from csrf protection
+    if (req.url === "/checkout/process_payment" || req.url.slice(0,5) == "/api/") {
+        return next();
+    } else {
+        csrfInstance(req, res, next);
+    }
+})
+
+app.use(function (req, res, next) {
+    if (req.csrfToken) {
+        res.locals.csrfToken = req.csrfToken();
+    }
     next();
 })
 
@@ -68,7 +80,8 @@ const productRoutes = require('./routes/products');
 const userRoutes = require('./routes/users');
 const cloudinaryRoutes = require('./routes/cloudinary.js');
 const api = {
-    products: require('./routes/api/products')
+    products: require('./routes/api/products'),
+    users: require('./routes/api/users')
 }
 
 async function main() {
@@ -76,7 +89,8 @@ async function main() {
     app.use('/products', productRoutes);
     app.use('/users', userRoutes);
     app.use('/cloudinary', cloudinaryRoutes);
-    app.use('/api/products', api.products);
+    app.use('/api/products', express.json(), api.products);
+    app.use('/api/users', express.json(), api.users);
 }
 
 main();
