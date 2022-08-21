@@ -39,7 +39,7 @@ async function removeFromCart (userId, variantId) {
 }
 
 async function updateQuantity (userId, variantId, newQuantity) {
-    let cartItem = await getCartItemByUserAndVariant (userId, variantId);
+    let cartItem = await getCartItemByUserAndVariant(userId, variantId);
     if (cartItem) {
         cartItem.set('quantity', newQuantity);
         cartItem.save();

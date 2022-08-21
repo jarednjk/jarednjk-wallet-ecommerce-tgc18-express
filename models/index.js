@@ -26,6 +26,9 @@ const Variant = bookshelf.model('Variant', {
     },
     color() {
         return this.belongsTo('Color');
+    },
+    cartItems() {
+        return this.hasMany('CartItem');
     }
 })
 
@@ -69,7 +72,10 @@ const Role = bookshelf.model('Role', {
 })
 
 const User = bookshelf.model('User', {
-    tableName: 'users'
+    tableName: 'users',
+    cartItems() {
+        return this.hasMany('CartItem');
+    }
 })
 
 const CartItem = bookshelf.model('CartItem', {
