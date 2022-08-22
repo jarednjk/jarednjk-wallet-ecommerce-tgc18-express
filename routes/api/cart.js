@@ -7,7 +7,6 @@ router.get('/', async (req, res) => {
         let user = req.user;
         console.log(user);
         let cart = new CartServices(user.id);
-        console.log(cart);
         res.send(await cart.getCart());
     } catch {
         res.sendStatus(500);
