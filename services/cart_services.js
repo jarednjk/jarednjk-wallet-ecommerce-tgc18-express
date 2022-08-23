@@ -55,7 +55,8 @@ class CartServices {
             variant.set('stock', variantStock + (oldQuantity - newQuantity))
         }
         await variant.save();
-        await cartDataLayer.updateQuantity(this.user_id, variantId, newQuantity)
+        await cartDataLayer.updateQuantity(this.user_id, variantId, newQuantity);
+        return true;
     }
 
     async getCart() {

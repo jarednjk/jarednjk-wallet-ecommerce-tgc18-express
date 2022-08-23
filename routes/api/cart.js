@@ -33,6 +33,9 @@ router.post('/:variant_id/update', async (req, res) => {
         let user = req.user;
         let cart = new CartServices(user.id);
         let updateVariantsToCart = await cart.setQuantity(req.params.variant_id, req.body.quantity);
+        console.log(req.params.variant_id)
+        console.log(req.body.quantity)
+        console.log(updateVariantsToCart)
         if (updateVariantsToCart) {
             res.send(`Variant ID: ${req.params.variant_id} (Quantity: ${req.body.quantity}) is updated in Cart`);
         } else {

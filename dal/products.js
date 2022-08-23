@@ -24,7 +24,7 @@ const getAllFeatures = async () => {
     })
 }
 
-const getProductByID = async (productId) => {
+const getProductById = async (productId) => {
     return await Product.where({
         'id': parseInt(productId)
     }).fetch({
@@ -33,7 +33,7 @@ const getProductByID = async (productId) => {
     });
 }
 
-const getVariantsByProductID = async (productId) => {
+const getVariantsByProductId = async (productId) => {
     return await Variant
     .where({
         'product_id': parseInt(productId)
@@ -44,7 +44,7 @@ const getVariantsByProductID = async (productId) => {
     })
 }
 
-const getVariantByID = async (variantId) => {
+const getVariantById = async (variantId) => {
     return await Variant.where({
         'id': parseInt(variantId)
     }).fetch({
@@ -59,7 +59,7 @@ const getAllColors = async () => {
     });
 }
 
-const getColorByID = async (colorId) => {
+const getColorById = async (colorId) => {
     return await Color.where({
         'id': parseInt(colorId)
     }).fetch({
@@ -77,10 +77,10 @@ module.exports = {
     getAllBrands, 
     getAllCategories, 
     getAllFeatures, 
-    getProductByID,
-    getVariantsByProductID,
-    getVariantByID,
+    getProductById,
+    getVariantsByProductId,
+    getVariantById,
     getAllColors,
-    getColorByID,
+    getColorById,
     getAllProducts
 }
