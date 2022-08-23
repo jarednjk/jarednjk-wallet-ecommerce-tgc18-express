@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { checkIfAuthenticatedJWT } = require('../../middlewares');
 const CartServices = require('../../services/cart_services');
-const CartServices = require('../../services/cart_services');
+const OrderServices = require('../../services/order_services');
 const Stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 router.get('/', checkIfAuthenticatedJWT, express.json(), async (req, res) => {
@@ -30,27 +30,53 @@ router.get('/', checkIfAuthenticatedJWT, express.json(), async (req, res) => {
             quantity: item.get('quantity')
         })
     }
+    // step 2 - create stripe payment
+
+    let metaData = JSON.stringify(meta);
+    const payment = {
+        payment_method_types: ['card'],
+        line_items: lineItems,
+        success_url: process.env.STRIPE_SUCCESS_URL + '?sessionId={CHECKOUT_SESSION_ID}',
+        cancel_url: process.env.STRIPE_ERROR_URL,
+        metaData: {
+            user_id: user.id,
+            orders: metaData
+        }
+    }
+
+    // step 3 - register the session
+    let stripeSession = await Stripe.checkout.sessions.create(payment);
+    res.send({
+        sessionId: stripeSession.id,
+        publishableKey: process.env.STRIPE_PUBLISHABLE_KEY
+    })
 })
 
-// step 2 - create stripe payment
-
-let metaData = JSON.stringify(meta);
-const payment = {
-    payment_method_types: ['card'],
-    line_items: lineItems,
-    success_url: process.env.STRIPE_SUCCESS_URL + '?sessionId={CHECKOUT_SESSION_ID}',
-    cancel_url: process.env.STRIPE_ERROR_URL,
-    metaData: {
-        user_id: user.id,
-        orders: metaData
+router.post('/process_payment', express.raw({
+    'type': 'application/json'
+}), async (req, res) => {
+    let payload = req.body;
+    let endpointSecret = process.env.STRIPE_ENDPOINT_SECRET;
+    let sigHeader = req.headers['stripe-signature'];
+    let event;
+    try {
+        event = Stripe.webhooks.constructEvent(payload, sigHeader, endpointSecret)
+    } catch (e) {
+        res.send({
+            'error': e.message
+        })
     }
-}
 
-// step 3 - register the session
-let stripeSession = await Stripe.checkout.sessions.create(payment);
-res.send({
-    sessionId: stripeSession.id,
-    publishableKey: process.env.STRIPE_PUBLISHABLE_KEY
+    if (event.type === 'checkout.session.completed') {
+        let stripeSession = event.data.object;
+        let cartServices = new CartServices(stripeSession.metadata.user_id);
+        let orderServices = new OrderServices();
+        await cartServices.checkoutCart(stripeSession);
+        await orderServices.addOrder(stripeSession);
+    }
+    res.send({
+        'received': true
+    })
 })
 
 module.exports = router;

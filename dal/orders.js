@@ -58,7 +58,7 @@ const getAddressByAddressId = async (addressId) => {
 }
 
 const createAddress = async (address) => {
-    const address = new Address({
+    const shippingAddress = new Address({
         address_line_1: address.line1,
         address_line_2: address.line2,
         country: address.country,
@@ -66,13 +66,13 @@ const createAddress = async (address) => {
         city: address.city,
         postal_code: address.postal_code
     })
-    await address.save();
-    return address;
+    await shippingAddress.save();
+    return shippingAddress;
 }
 
-const deleteAddress = async (address) => {
-    const address = await getAddressByAddressId(addressId);
-    await address.destroy();
+const deleteAddress = async (addressId) => {
+    const shippingAddress = await getAddressByAddressId(addressId);
+    await shippingAddress.destroy();
 }
 
 const getOrderItemsByOrderId = async (orderId) => {
