@@ -9,6 +9,8 @@ router.get('/', checkIfAuthenticatedJWT, express.json(), async (req, res) => {
     let user = req.user;
     let cart = new CartServices(user.id)
     const items = await cart.getCart();
+    // check that order is ok to go ahead
+    // create success route
 
     // step 1 - create line items
     let lineItems = [];

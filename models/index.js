@@ -42,7 +42,7 @@ const Feature = bookshelf.model('Feature', {
     }
 })
 
-const Material = bookshelf.model('Material',{
+const Material = bookshelf.model('Material', {
     tableName: 'materials',
     products() {
         return this.hasMany('Product');
@@ -71,13 +71,22 @@ const Color = bookshelf.model('Color', {
 })
 
 const Role = bookshelf.model('Role', {
-    tableName: 'roles'
+    tableName: 'roles',
+    users() {
+        return this.hasMany('User');
+    }
 })
 
 const User = bookshelf.model('User', {
     tableName: 'users',
     cartItems() {
         return this.hasMany('CartItem');
+    },
+    orderItems() {
+        return this.hasMany('OrderItem');
+    },
+    role() {
+        return this.belongsTo('Role');
     }
 })
 
@@ -89,7 +98,7 @@ const CartItem = bookshelf.model('CartItem', {
     user() {
         return this.belongsTo('User');
     }
-}) 
+})
 
 const Order = bookshelf.model('Order', {
     tableName: 'orders',
@@ -127,8 +136,23 @@ const OrderItem = bookshelf.model('OrderItem', {
         return this.belongsTo('Variant');
     },
     order() {
-        this.belongsTo('Order');
+        return this.belongsTo('Order');
     }
 })
 
-module.exports = { Product, Material, Brand, Category, Feature, Variant, Color, Role, User, CartItem, Order, Address, Status, OrderItem };
+module.exports = {
+    Product,
+    Material,
+    Brand,
+    Category,
+    Feature,
+    Variant,
+    Color,
+    Role,
+    User,
+    CartItem,
+    Order,
+    Address,
+    Status,
+    OrderItem
+};
