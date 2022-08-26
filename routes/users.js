@@ -67,7 +67,7 @@ router.post('/login', async (req, res) => {
                 // check if the password matches
                 if (user.get('password') === getHashedPassword(form.data.password)) {
                     // store user details
-                    req.session.user = {
+                    req.user = {
                         id: user.get('id'),
                         first_name: user.get('first_name'),
                         last_name: user.get('last_name'),
@@ -91,7 +91,7 @@ router.post('/login', async (req, res) => {
 })
 
 router.get('/profile', async (req, res) => {
-    const user = req.session.user;
+    const user = req.user;
     if (!user) {
         req.flash('error_messages', 'You do not have permission to view this page.');
         res.redirect('/users/login');

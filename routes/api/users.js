@@ -31,25 +31,33 @@ router.post('/login', async (req, res) => {
     })
 
     if (user && user.get('password') == getHashedPassword(req.body.password)) {
-        const userObject = {
-            'email': user.get('email'),
-            'id': user.get('id')
-        }
-        let accessToken = generateAccessToken(userObject, process.env.TOKEN_SECRET, '1h');
-        let refreshToken = generateAccessToken(userObject, process.env.REFRESH_TOKEN_SECRET, '7d');
+        // const userObject = {
+        //     'email': user.get('email'),
+        //     'id': user.get('id')
+        // }
+
+        let accessToken = generateAccessToken(user, process.env.TOKEN_SECRET, '1h');
+        let refreshToken = generateAccessToken(user, process.env.REFRESH_TOKEN_SECRET, '7d');
+        let user_id = user.get('id');
+
+        res.status(200);
         res.send({
-            accessToken, refreshToken
+            accessToken, refreshToken, user_id
         })
     } else {
-        res.send({
-            'error': 'Wrong email or password'
-        })
+        res.status(204);
+        res.send("Wrong email or password");
     }
 });
 
 router.get('/profile', checkIfAuthenticatedJWT, async (req, res) => {
-    const user = req.user;
-    res.send(user);
+    let user = await User.where({
+        'id': req.user.id
+    }).fetch({
+        require: true
+    });
+
+    res.send(user)
 })
 
 router.post('/refresh', async(req,res) => {

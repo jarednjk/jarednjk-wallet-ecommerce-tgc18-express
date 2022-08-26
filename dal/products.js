@@ -29,7 +29,7 @@ const getProductById = async (productId) => {
         'id': parseInt(productId)
     }).fetch({
         require: true,
-        withRelated: ['material', 'brand', 'category', 'features']
+        withRelated: ['material', 'brand', 'category', 'features', 'variants']
     });
 }
 
@@ -69,7 +69,10 @@ const getColorById = async (colorId) => {
 }
 
 const getAllProducts = async () => {
-    return await Product.fetchAll();
+    return await Product.collection().fetch({
+        require: false,
+        withRelated: ['variants']
+    })
 }
 
 module.exports = {
