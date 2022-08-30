@@ -25,7 +25,7 @@ router.get('/:product_id/variants', async (req, res) => {
 router.get('/materials', async (req, res) => {
     try {
         const materials = await productDataLayer.getAllMaterials()
-        materials.unshift([0, '--SELECT MATERIAL--']);
+        materials.unshift([0, '------']);
         res.send(materials)
     } catch {
         res.sendStatus(500)
@@ -35,7 +35,7 @@ router.get('/materials', async (req, res) => {
 router.get('/categories', async (req, res) => {
     try {
         const categories = await productDataLayer.getAllCategories()
-        categories.unshift([0, '--SELECT CATEGORY--']);
+        categories.unshift([0, '------']);
         res.send(categories)
     } catch {
         res.sendStatus(500)
@@ -45,7 +45,7 @@ router.get('/categories', async (req, res) => {
 router.get('/brands', async (req, res) => {
     try {
         const brands = await productDataLayer.getAllBrands()
-        brands.unshift([0, '--SELECT BRAND--']);
+        brands.unshift([0, '------']);
         res.send(brands)
     } catch {
         res.sendStatus(500)
@@ -66,13 +66,13 @@ router.post('/search', async (req, res) => {
 
     if (Object.keys(req.body).length === 0) {
         const products = await q.fetch({
-            withRelated: ['material', 'brand', 'category', 'features']
+            withRelated: ['material', 'brand', 'category', 'features', 'variants']
         })
         res.send(products)
     }
     else if (Object.keys(req.body).length != 0) {
         if (req.body.name) {
-            q.where('name', 'ilike', '%' + req.body.name + '%')
+            q.where('name', 'like', '%' + req.body.name + '%')
         }
         if (req.body.min_cost) {
             q.where('cost', '>=', req.body.min_cost)
@@ -100,7 +100,7 @@ router.post('/search', async (req, res) => {
             .where('feature_id', 'in', form.data.features.split(','))
         }
         const products = await q.fetch({
-            withRelated: ['material', 'brand', 'category', 'features']
+            withRelated: ['material', 'brand', 'category', 'features', 'variants']
         })
         res.send(products);
     }

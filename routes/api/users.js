@@ -42,7 +42,7 @@ router.post('/login', async (req, res) => {
 
         res.status(200);
         res.send({
-            accessToken, refreshToken, user_id
+            accessToken, refreshToken, id:user_id, first_name:user.first_name, last_name: user.last_name
         })
     } else {
         res.status(204);
@@ -96,6 +96,18 @@ router.post('/logout', async (req, res) => {
             })
         })
     }
+})
+
+router.post('/register', async (req, res) => {
+    let user = new User({
+        'first_name': req.body.first_name,
+        'last_name': req.body.last_name,
+        'email': req.body.email,
+        'password': req.body.password
+    })
+
+    await user.save()
+    res.send(user);
 })
 
 router.post('/refresh', async (req, res) => {
