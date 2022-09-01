@@ -6,21 +6,28 @@ class CartServices {
         this.user_id = user_id;
     }
 
-    async addToCart(variantId, quantity) {
+    async addToCart(userId, variantId, quantity) {
         // check if user has added the product to the shopping cart before
-        let cartItem = await cartDataLayer.getCartItemByUserAndVariant(this.user_id, variantId);
+        console.log('services layer called')
+        let cartItem = await cartDataLayer.getCartItemByUserAndVariant(userId, variantId);
+        console.log(cartItem)
+
         const variant = await getVariantById(variantId);
+        console.log(variant)
+
         const variantStock = variant.get('stock');
+        console.log(variantStock)
+
         if (cartItem && variantStock >= quantity) {
             await cartDataLayer.updateQuantity(
-                this.user_id,
+                userId,
                 variantId,
                 parseInt(cartItem.get('quantity')) + parseInt(quantity)
             );
             variant.set('stock', variantStock - quantity);
             await variant.save();
         } else if (!cartItem && variantStock >= quantity) {
-            cartItem = await cartDataLayer.createCartItem(this.user_id, variantId, quantity);
+            cartItem = await cartDataLayer.createCartItem(userId, variantId, quantity);
             variant.set('stock', variantStock - quantity);
             await variant.save();
             return cartItem;

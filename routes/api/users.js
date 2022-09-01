@@ -103,7 +103,8 @@ router.post('/register', async (req, res) => {
         'first_name': req.body.first_name,
         'last_name': req.body.last_name,
         'email': req.body.email,
-        'password': req.body.password
+        'password': getHashedPassword(req.body.password),
+        'role_id': 2
     })
 
     await user.save()

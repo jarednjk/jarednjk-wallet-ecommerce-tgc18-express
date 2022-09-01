@@ -228,9 +228,9 @@ router.post('/:product_id/delete', checkIfAuthenticated, async (req, res) => {
 
 router.get('/:product_id/variants', async (req, res) => {
     const productId = req.params.product_id;
-    const product = await dataLayer.getProductByID(productId);
+    const product = await dataLayer.getProductById(productId);
 
-    const variants = await dataLayer.getVariantsByProductID(productId);
+    const variants = await dataLayer.getVariantsByProductId(productId);
     res.render('products/variants', {
         product: product.toJSON(),
         variants: variants.toJSON()
@@ -239,7 +239,7 @@ router.get('/:product_id/variants', async (req, res) => {
 
 router.get('/:product_id/variants/create', async (req, res) => {
     const productId = req.params.product_id;
-    const product = await dataLayer.getProductByID(productId);
+    const product = await dataLayer.getProductById(productId);
 
     const allColors = await dataLayer.getAllColors();
 
@@ -256,7 +256,7 @@ router.get('/:product_id/variants/create', async (req, res) => {
 
 router.post('/:product_id/variants/create', async (req, res) => {
     const productId = req.params.product_id;
-    const product = await dataLayer.getProductByID(productId);
+    const product = await dataLayer.getProductById(productId);
 
     const allColors = await dataLayer.getAllColors();
 
@@ -274,7 +274,7 @@ router.post('/:product_id/variants/create', async (req, res) => {
             });
             await variant.save();
 
-            const color = await dataLayer.getColorByID(form.data.color_id);
+            const color = await dataLayer.getColorById(form.data.color_id);
 
             req.flash('success_messages', `New color variant "${color.get('name')}" has been created!`);
             res.redirect(`/products/${productId}/variants`);
@@ -290,9 +290,9 @@ router.post('/:product_id/variants/create', async (req, res) => {
 
 router.get('/:product_id/variants/:variant_id/update', async (req, res) => {
     const productId = req.params.product_id;
-    const product = await dataLayer.getProductByID(productId);
+    const product = await dataLayer.getProductById(productId);
     const variantId = req.params.variant_id;
-    const variant = await dataLayer.getVariantByID(variantId);
+    const variant = await dataLayer.getVariantById(variantId);
 
     const allColors = await dataLayer.getAllColors();
 
@@ -314,7 +314,7 @@ router.get('/:product_id/variants/:variant_id/update', async (req, res) => {
 
 router.post('/:product_id/variants/:variant_id/update', async (req, res) => {
     const variantId = req.params.variant_id;
-    const variant = await dataLayer.getVariantByID(variantId);
+    const variant = await dataLayer.getVariantById(variantId);
 
     const allColors = await dataLayer.getAllColors();
     const variantForm = createVariantForm(allColors);
@@ -324,7 +324,7 @@ router.post('/:product_id/variants/:variant_id/update', async (req, res) => {
             variant.set(form.data);
             variant.set('date_updated', new Date());
             variant.save();
-            const color = await dataLayer.getColorByID(form.data.color_id);
+            const color = await dataLayer.getColorById(form.data.color_id);
 
             req.flash('success_messages', `Color variant "${color.get('name')}" has been updated!`);
 
@@ -344,9 +344,9 @@ router.post('/:product_id/variants/:variant_id/update', async (req, res) => {
 
 router.get('/:product_id/variants/:variant_id/delete', async (req, res) => {
     const productId = req.params.product_id;
-    const product = await dataLayer.getProductByID(productId);
+    const product = await dataLayer.getProductById(productId);
     const variantId = req.params.variant_id;
-    const variant = await dataLayer.getVariantByID(variantId);
+    const variant = await dataLayer.getVariantById(variantId);
 
     res.render('products/variants-delete', {
         product: product.toJSON(),
@@ -356,7 +356,7 @@ router.get('/:product_id/variants/:variant_id/delete', async (req, res) => {
 
 router.post('/:product_id/variants/:variant_id/delete', async (req, res) => {
     const variantId = req.params.variant_id;
-    const variant = await dataLayer.getVariantByID(variantId);
+    const variant = await dataLayer.getVariantById(variantId);
 
     await variant.destroy();
 

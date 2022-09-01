@@ -11,7 +11,7 @@ const checkIfAuthenticated = (req, res, next) => {
 
 const checkIfAuthenticatedJWT = (req, res, next) => {
     const authHeader = req.headers.authorization;
-
+    console.log("haha")
     if (authHeader) {
         const token = authHeader.split(' ')[1];
         jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
@@ -19,6 +19,7 @@ const checkIfAuthenticatedJWT = (req, res, next) => {
                 return res.sendStatus(403);
             }
             req.user = user;
+            console.log(user.id)
             next();
         });
     } else {

@@ -45,7 +45,7 @@ app.use(function (req, res, next) {
     console.log("checking for csrf exclusion");
     // exclude whatever URL we want from csrf protection
     if (req.url === "/checkout/process_payment" || req.url.slice(0,5) == "/api/") {
-        return next();
+        next();
     } else {
         csrfInstance(req, res, next);
     }

@@ -14,14 +14,18 @@ router.get('/', async (req, res) => {
 })
 
 router.post('/:variant_id/add', async(req, res) => {
+    console.log('add cart api called')
     try {
-        let user = req.user;
-        let cart = new CartServices(user.id);
-        let addVariantsToCart = await cart.addToCart(req.params.variant_id, req.body.quantity);
+        console.log(req.user.id)
+        let userId = req.user.id;
+        let cart = new CartServices(userId);
+        let addVariantsToCart = await cart.addToCart(userId, req.params.variant_id, 1);
         if (addVariantsToCart) {
-            res.send(`Variant ID: ${req.params.variant_id} (Quantity: ${req.body.quantity}) is added to Cart`);
-        } else if (addVariantsToCart) {
-            res.sendStatus(403);
+            res.json({
+                "success": "item added"
+            });
+        } else {
+            res.sendStatus(400);
         }
     } catch {
         res.sendStatus(500);

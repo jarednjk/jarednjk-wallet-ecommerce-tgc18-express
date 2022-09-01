@@ -59,15 +59,18 @@ router.post('/login', async (req, res) => {
             }).fetch({
                 require: false
             });
+            console.log('success', user)
 
             if (!user) {
                 req.flash('error_messages', 'Sorry, the authentication details you entered is incorrect.');
                 res.redirect('/users/login');
             } else {
                 // check if the password matches
+                console.log(user.get('password'))
+                console.log(getHashedPassword(form.data.password))
                 if (user.get('password') === getHashedPassword(form.data.password)) {
                     // store user details
-                    req.user = {
+                    req.session.user = {
                         id: user.get('id'),
                         first_name: user.get('first_name'),
                         last_name: user.get('last_name'),
@@ -77,10 +80,12 @@ router.post('/login', async (req, res) => {
                     res.redirect('/users/profile');
                 } else {
                     req.flash("error_messages", "The email or password you entered is incorrect. Please try again.");
+                    console.log('error_messages', user)
                     res.redirect('/users/login');
                 }
             }
         }, 'error': (form) => {
+            console.log('error', user)
             req.flash('error_messages', "There are some problems logging you in. Please fill in the form.");
             res.render('users/login', {
                 'form': form.toHTML(bootstrapField)
@@ -91,7 +96,8 @@ router.post('/login', async (req, res) => {
 })
 
 router.get('/profile', async (req, res) => {
-    const user = req.user;
+    const user = req.session.user;
+    console.log('profile', user)
     if (!user) {
         req.flash('error_messages', 'You do not have permission to view this page.');
         res.redirect('/users/login');
