@@ -13,23 +13,23 @@ router.get('/', async (req, res) => {
     }
 })
 
-router.post('/:variant_id/add', async(req, res) => {
+router.post('/:variant_id/add', async (req, res) => {
     console.log('add cart api called')
-    try {
-        console.log(req.user.id)
-        let userId = req.user.id;
-        let cart = new CartServices(userId);
-        let addVariantsToCart = await cart.addToCart(userId, req.params.variant_id, 1);
-        if (addVariantsToCart) {
-            res.json({
-                "success": "item added"
-            });
-        } else {
-            res.sendStatus(400);
-        }
-    } catch {
-        res.sendStatus(500);
+
+    console.log(req.user.id)
+    let userId = req.user.id;
+    let addVariantsToCart = await CartServices.addToCart(userId, req.params.variant_id, 1);
+    if (addVariantsToCart) {
+        res.json({
+            "success": "item added"
+        });
+    } else {
+        res.status(400);
+        res.json({
+            "fail": "failed to add"
+        })
     }
+
 })
 
 router.post('/:variant_id/update', async (req, res) => {
