@@ -3,14 +3,9 @@ const router = express.Router();
 const CartServices = require('../../services/cart_services');
 
 router.get('/', async (req, res) => {
-    try {
-        let user = req.user;
-        console.log(user);
-        let cart = new CartServices(user.id);
-        res.send(await cart.getCart());
-    } catch {
-        res.sendStatus(500);
-    }
+    const cartItems = await CartServices.getCart(req.user.id)
+    res.json(cartItems)
+    console.log('hello', cartItems)
 })
 
 router.post('/:variant_id/add', async (req, res) => {
@@ -29,7 +24,15 @@ router.post('/:variant_id/add', async (req, res) => {
             "fail": "failed to add"
         })
     }
+})
 
+router.post('/:variant_id/delete', async (req, res) => {
+    let userId = req.user.id;
+    let variantId = req.params.variant_id
+    await CartServices.remove(userId, variantId)
+    res.json({
+        'success': 'cart item deleted'
+    })
 })
 
 router.post('/:variant_id/update', async (req, res) => {
@@ -45,17 +48,6 @@ router.post('/:variant_id/update', async (req, res) => {
         } else {
             res.sendStatus(403);
         }
-    } catch {
-        res.sendStatus(500);
-    }
-})
-
-router.post('/:variant_id/delete', async (req, res) => {
-    try {
-        let user = req.user;
-        let cart = new CartServices(user.id);
-        await cart.remove(req.params.variant_id);
-        res.send(`Deleted variant ID :${req.params.variant_id} from cart`);
     } catch {
         res.sendStatus(500);
     }

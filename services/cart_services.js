@@ -75,34 +75,49 @@ async function addToCart(userId, variantId, quantity) {
 // }
 
 async function remove(userId, variantId) {
-    const variant = await getVariantById(variantId);
-    const variantStock = variant.get('stock');
-    const cartItem = await cartDataLayer.getCartItemByUserAndVariant(userId, variantId);
-    const cartItemQuantity = cartItem.get('quantity');
-    variant.set('stock', variantStock + cartItemQuantity);
-    await variant.save();
-    await cartDataLayer.removeFromCart(userId, variantId);
+    return await cartDataLayer.removeFromCart(userId, variantId);
 }
 
-async function setQuantity(userId, variantId, newQuantity) {
+async function setQuantity(userId, variantId, quantity) {
     const cartItem = await cartDataLayer.getCartItemByUserAndVariant(userId, variantId);
-    const oldQuantity = cartItem.get('quantity');
     const variant = await getVariantById(variantId);
     const variantStock = variant.get('stock');
-
-    if (newQuantity >= oldQuantity) {
-        if (variantStock >= (newQuantity - oldQuantity)) {
-            variant.set('stock', variantStock - (newQuantity - oldQuantity))
-        } else if (variantStock < (newQuantity - oldQuantity)) {
+    if (!cartItem) {
+        if (variantStock > quantity) {
+            await cartDataLayer.createCartItem(userId, variantId, quantity);
+            return true;
+        } else {
             return false;
         }
-    } else if (newQuantity < oldQuantity) {
-        variant.set('stock', variantStock + (oldQuantity - newQuantity))
+    } else {
+        if (stock > quantity) {
+            await cartDataLayer.updateQuantity(userId, variantId, quantity);
+            return true;
+        } else {
+            return false;
+        }
     }
-    await variant.save();
-    await cartDataLayer.updateQuantity(userId, variantId, newQuantity);
-    return true;
 }
+
+// async function setQuantity(userId, variantId, newQuantity) {
+//     const cartItem = await cartDataLayer.getCartItemByUserAndVariant(userId, variantId);
+//     const oldQuantity = cartItem.get('quantity');
+//     const variant = await getVariantById(variantId);
+//     const variantStock = variant.get('stock');
+
+//     if (newQuantity >= oldQuantity) {
+//         if (variantStock >= (newQuantity - oldQuantity)) {
+//             variant.set('stock', variantStock - (newQuantity - oldQuantity))
+//         } else if (variantStock < (newQuantity - oldQuantity)) {
+//             return false;
+//         }
+//     } else if (newQuantity < oldQuantity) {
+//         variant.set('stock', variantStock + (oldQuantity - newQuantity))
+//     }
+//     await variant.save();
+//     await cartDataLayer.updateQuantity(userId, variantId, newQuantity);
+//     return true;
+// }
 
 async function getCart(userId) {
     return await cartDataLayer.getCart(userId);
