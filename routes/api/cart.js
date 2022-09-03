@@ -5,7 +5,6 @@ const CartServices = require('../../services/cart_services');
 router.get('/', async (req, res) => {
     const cartItems = await CartServices.getCart(req.user.id)
     res.json(cartItems)
-    console.log('hello', cartItems)
 })
 
 router.post('/:variant_id/add', async (req, res) => {
@@ -36,20 +35,21 @@ router.post('/:variant_id/delete', async (req, res) => {
 })
 
 router.post('/:variant_id/update', async (req, res) => {
-    try {
-        let user = req.user;
-        let cart = new CartServices(user.id);
-        let updateVariantsToCart = await cart.setQuantity(req.params.variant_id, req.body.quantity);
-        console.log(req.params.variant_id)
-        console.log(req.body.quantity)
-        console.log(updateVariantsToCart)
-        if (updateVariantsToCart) {
-            res.send(`Variant ID: ${req.params.variant_id} (Quantity: ${req.body.quantity}) is updated in Cart`);
-        } else {
-            res.sendStatus(403);
-        }
-    } catch {
-        res.sendStatus(500);
+    console.log('update started')
+    let userId = req.user.id;
+    let variantId = req.params.variant_id;
+    let quantity = parseInt(req.body.quantity);
+    console.log('hi', userId, variantId, quantity)
+
+    let updateCartItem = await CartServices.setQuantity(userId, variantId, quantity);
+    if (updateCartItem) {
+        res.json({
+            'success': 'quantity updated'
+        })
+    } else {
+        res.json({
+            'success': 'quantity updated'
+        })
     }
 })
 

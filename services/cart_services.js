@@ -6,7 +6,6 @@ async function addToCart(userId, variantId, quantity) {
     // check if user has added the product to the shopping cart before
     console.log('services layer called')
     let cartItem = await cartDataLayer.getCartItemByUserAndVariant(userId, variantId);
-    console.log('------------------ ', cartItem.toJSON())
 
     const variant = await getVariantById(variantId);
     console.log(variant)
@@ -44,36 +43,6 @@ async function addToCart(userId, variantId, quantity) {
     }
 }
 
-// async addToCart(userId, variantId, quantity) {
-//     // check if user has added the product to the shopping cart before
-//     console.log('services layer called')
-//     let cartItem = await cartDataLayer.getCartItemByUserAndVariant(userId, variantId);
-//     console.log(cartItem)
-
-//     const variant = await getVariantById(variantId);
-//     console.log(variant)
-
-//     const variantStock = variant.get('stock');
-//     console.log(variantStock)
-
-//     if (cartItem && variantStock >= quantity) {
-//         await cartDataLayer.updateQuantity(
-//             userId,
-//             variantId,
-//             parseInt(cartItem.get('quantity')) + parseInt(quantity)
-//         );
-//         variant.set('stock', variantStock - quantity);
-//         await variant.save();
-//     } else if (!cartItem && variantStock >= quantity) {
-//         cartItem = await cartDataLayer.createCartItem(userId, variantId, quantity);
-//         variant.set('stock', variantStock - quantity);
-//         await variant.save();
-//         return cartItem;
-//     } else if (variantStock < quantity) {
-//         return false;
-//     }
-// }
-
 async function remove(userId, variantId) {
     return await cartDataLayer.removeFromCart(userId, variantId);
 }
@@ -90,7 +59,7 @@ async function setQuantity(userId, variantId, quantity) {
             return false;
         }
     } else {
-        if (stock > quantity) {
+        if (variantStock > quantity) {
             await cartDataLayer.updateQuantity(userId, variantId, quantity);
             return true;
         } else {
@@ -98,6 +67,7 @@ async function setQuantity(userId, variantId, quantity) {
         }
     }
 }
+
 
 // async function setQuantity(userId, variantId, newQuantity) {
 //     const cartItem = await cartDataLayer.getCartItemByUserAndVariant(userId, variantId);
