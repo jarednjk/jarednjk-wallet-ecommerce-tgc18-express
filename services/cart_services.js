@@ -68,35 +68,22 @@ async function setQuantity(userId, variantId, quantity) {
     }
 }
 
-
-// async function setQuantity(userId, variantId, newQuantity) {
-//     const cartItem = await cartDataLayer.getCartItemByUserAndVariant(userId, variantId);
-//     const oldQuantity = cartItem.get('quantity');
-//     const variant = await getVariantById(variantId);
-//     const variantStock = variant.get('stock');
-
-//     if (newQuantity >= oldQuantity) {
-//         if (variantStock >= (newQuantity - oldQuantity)) {
-//             variant.set('stock', variantStock - (newQuantity - oldQuantity))
-//         } else if (variantStock < (newQuantity - oldQuantity)) {
-//             return false;
-//         }
-//     } else if (newQuantity < oldQuantity) {
-//         variant.set('stock', variantStock + (oldQuantity - newQuantity))
-//     }
-//     await variant.save();
-//     await cartDataLayer.updateQuantity(userId, variantId, newQuantity);
-//     return true;
-// }
-
 async function getCart(userId) {
     return await cartDataLayer.getCart(userId);
 }
 
-async function checkoutCart(stripeSession) {
-    const cartItems = JSON.parse(stripeSession.metadata.orders)
-    for (let cartItem of cartItems) {
-        await cartDataLayer.removeFromCart(userId, cartItem['variant_id']);
+// async function checkoutCart(stripeSession) {
+//     const cartItems = JSON.parse(stripeSession.metadata.orders)
+//     for (let cartItem of cartItems) {
+//         await cartDataLayer.removeFromCart(userId, cartItem['variant_id']);
+//     }
+// }
+
+async function emptyCart (userId) {
+    const cartItems = await getCart(userId)
+    for (let item of cartItems) {
+        const variantId = item.get('variant_id');
+        await remove(userId, variantId)
     }
 }
 
@@ -105,5 +92,5 @@ module.exports = {
     remove,
     setQuantity,
     getCart,
-    checkoutCart
+    emptyCart
 }

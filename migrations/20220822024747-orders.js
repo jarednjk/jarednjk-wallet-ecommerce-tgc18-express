@@ -22,7 +22,7 @@ exports.up = function(db) {
       primaryKey: true,
       autoIncrement: true
     },
-    total_cost: {
+    total_amount: {
       type: 'int',
       unsigned: true,
       notNull: true
@@ -36,24 +36,59 @@ exports.up = function(db) {
       length: 20,
       notNull: true
     },
-    payment_ref: {
+    payment_intent: {
       type: 'string',
       length: 35,
       notNull: true
     },
-    address_id: {
-      type: 'int',
-      unsigned: true,
-      notNull: true,
-      foreignKey: {
-        name: 'orders_address_fk',
-        table: 'addresses',
-        mapping: 'id',
-        rules: {
-          onDelete: 'restrict',
-          onUpdate: 'restrict'
-        }
-      }
+    delivery_date: {
+      type: 'datetime',
+      notNull: false
+    },
+    shipping_option: {
+      type: 'string',
+      length: 100,
+      notNull: true
+    },
+    billing_address_line1: {
+      type: 'string',
+      length: 100,
+      notNull: true
+    },
+    billing_address_line2: {
+      type: 'string',
+      length: 100,
+      notNull: false
+    },
+    billing_address_postal: {
+      type: 'string',
+      length: 15,
+      notNull: true
+    },
+    billing_address_country: {
+      type: 'string',
+      length: 2,
+      notNull: true
+    },
+    shipping_address_line1: {
+      type: 'string',
+      length: 100,
+      notNull: true
+    },
+    shipping_address_line2: {
+      type: 'string',
+      length: 100,
+      notNull: false
+    },
+    shipping_address_postal: {
+      type: 'string',
+      length: 15,
+      notNull: true
+    },
+    shipping_address_country: {
+      type: 'string',
+      length: 2,
+      notNull: true
     },
     status_id: {
       type: 'smallint',

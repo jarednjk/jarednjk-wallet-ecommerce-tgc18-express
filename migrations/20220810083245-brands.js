@@ -15,15 +15,10 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db) {
-  return  db.createTable('categories',{
+  return  db.createTable('brands',{
     id: { type: 'int', unsigned: true, primaryKey:true, autoIncrement:true},
     name: { type: 'string', length:100},
 })
-};
-
-exports.down = function(db) {
-return db.dropTable('categories')
-
 };
 
 exports.down = function(db) {

@@ -16,7 +16,7 @@ exports.setup = function(options, seedLink) {
 
 exports.up = function(db) {
   return db.addColumn('products', 'brand_id', {
-    type: 'smallint',
+    type: 'int',
     unsigned: true,
     notNull: true,
     foreignKey: {

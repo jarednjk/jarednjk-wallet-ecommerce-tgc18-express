@@ -87,6 +87,9 @@ const User = bookshelf.model('User', {
     },
     role() {
         return this.belongsTo('Role');
+    },
+    orders() {
+        return this.hasMany('Order')
     }
 })
 
@@ -105,22 +108,12 @@ const Order = bookshelf.model('Order', {
     status() {
         return this.belongsTo('Status');
     },
-    address() {
-        return this.belongsTo('address');
-    },
     orderItems() {
         return this.hasMany('OrderItem');
     },
     user() {
         return this.belongsTo('User');
     },
-})
-
-const Address = bookshelf.model('Address', {
-    tableName: 'addresses',
-    orders() {
-        return this.hasMany('Order');
-    }
 })
 
 const Status = bookshelf.model('Status', {
@@ -156,7 +149,6 @@ module.exports = {
     User,
     CartItem,
     Order,
-    Address,
     Status,
     OrderItem,
     BlacklistedToken
