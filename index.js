@@ -87,7 +87,8 @@ const api = {
     products: require('./routes/api/products'),
     users: require('./routes/api/users'),
     cart: require('./routes/api/cart'),
-    checkout: require('./routes/api/checkout')
+    checkout: require('./routes/api/checkout'),
+    orders: require('./routes/api/orders')
 }
 
 async function main() {
@@ -98,7 +99,8 @@ async function main() {
     app.use('/api/products', express.json(), api.products);
     app.use('/api/users', express.json(), api.users);
     app.use('/api/cart', express.json(), checkIfAuthenticatedJWT, api.cart);
-    app.use('/api/checkout', api.checkout)
+    app.use('/api/orders', express.json(), checkIfAuthenticatedJWT, api.orders);
+    app.use('/api/checkout', api.checkout);
 }
 
 main();

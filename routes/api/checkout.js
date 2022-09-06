@@ -6,17 +6,18 @@ const { checkIfAuthenticatedJWT } = require('../../middlewares');
 const CartServices = require('../../services/cart_services');
 const Stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
-router.get('/', checkIfAuthenticatedJWT, express.json(), async (req, res) => {
+router.get('/:user_id/checkout', express.json(), async (req, res) => {
 
     // step 1 - create line items
-    const cartItems = await CartServices.getCart(req.user.id)
+   
+    const cartItems = await CartServices.getCart(req.params.user_id)
     let lineItems = [];
     let meta = [];
     for (let item of cartItems) {
         const lineItem = {
             name: item.related('variant').related('product').get('name'),
-            images: item.related('variant').get('image_url'),
-            amount: item.related('variant').related('product').get('cost'),
+            images: [item.related('variant').get('image_url')],
+            amount: (item.related('variant').related('product').get('cost'))*100,
             quantity: item.get('quantity'),
             currency: 'SGD'
         }
@@ -31,10 +32,11 @@ router.get('/', checkIfAuthenticatedJWT, express.json(), async (req, res) => {
     // step 2 - create stripe payment
 
     let metaData = JSON.stringify(meta);
+
     const payment = {
         payment_method_types: ['card', 'grabpay'],
         line_items: lineItems,
-        success_url: process.env.STRIPE_SUCCESS_URL,
+        success_url: process.env.STRIPE_SUCCESS_URL + '?sessionId={CHECKOUT_SESSION_ID}',
         cancel_url: process.env.STRIPE_ERROR_URL,
         billing_address_collection: 'required',
         shipping_address_collection: {
@@ -89,27 +91,23 @@ router.get('/', checkIfAuthenticatedJWT, express.json(), async (req, res) => {
         }
     }
 
+    
+
     // step 3 - register the session
     let stripeSession = await Stripe.checkout.sessions.create(payment);
+    
 
-
-    res.json({
+    res.render('checkout/checkout',{
         sessionId: stripeSession.id,
         publishableKey: process.env.STRIPE_PUBLISHABLE_KEY
     })
 })
 
-router.get('/success', function (req, res) {
-    res.send('Payment success')
-})
-
-router.get('/cancelled', function (req, res) {
-    res.send('Payment cancelled')
-})
 
 router.post('/process_payment', express.raw({ 'type': 'application/json' }), async (req, res) => {
     let payload = req.body;
     let endpointSecret = process.env.STRIPE_ENDPOINT_SECRET;
+    console.log('process started', endpointSecret)
 
     let sigHeader = req.headers['stripe-signature'];
     let event = null;
@@ -123,7 +121,7 @@ router.post('/process_payment', express.raw({ 'type': 'application/json' }), asy
             let eventData = event.data.object
 
             const metadata = JSON.parse(event.data.object.metadata.orders);
-            const customerId = metadata[0].customer_id;
+            const userId = metadata[0].user_id;
 
             const paymentIntent = await Stripe.paymentIntents.retrieve(
                 eventData.payment_intent
@@ -139,8 +137,8 @@ router.post('/process_payment', express.raw({ 'type': 'application/json' }), asy
 
             const orderData = {
                 total_amount: eventData.amount_total,
-                customer_id: customerId,
-                order_status_id: 3, //set order status as paid
+                user_id: userId,
+                status_id: 3, //set order status as paid
                 payment_type: charge.payment_method_details.type,
                 receipt_url: charge.receipt_url,
                 order_date: new Date(event.created * 1000),
@@ -155,6 +153,8 @@ router.post('/process_payment', express.raw({ 'type': 'application/json' }), asy
                 shipping_address_postal: eventData.shipping.address.postal_code,
                 shipping_address_country: eventData.shipping.address.country
             }
+
+            console.log(orderData)
 
             const order = await createOrder(orderData)
 
@@ -176,14 +176,14 @@ router.post('/process_payment', express.raw({ 'type': 'application/json' }), asy
                 const variantStock = variant.get('stock');
                 
 
-                variant.set({ variantStock: variantStock - quantity })
+                variant.set({ stock: variantStock - quantity })
                 await variant.save()
             }
 
             console.log('orderitemdata')
 
             console.log('user Id', userId)
-            await CartServices.remove(userId)
+            await CartServices.emptyCart(userId)
             res.status(201)
             res.json({
                 'success': "Order successfully made"

@@ -90,6 +90,10 @@ exports.up = function(db) {
       length: 2,
       notNull: true
     },
+    receipt_url: {
+      type: 'string',
+      length: 2048
+    },
     status_id: {
       type: 'smallint',
       unsigned: true,

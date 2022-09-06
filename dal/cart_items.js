@@ -8,6 +8,7 @@ const getCart = async (userId) => {
         require: false,
         withRelated: ['variant', 'user', 'variant.color', 'variant.product']
     })
+    
 }
 
 const getCartItemByUserAndVariant = async ( userId, variantId) => {
