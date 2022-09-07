@@ -1,0 +1,103 @@
+{{#extends 'base'}}
+{{#block 'content'}}
+
+<table class="table table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Order ID</th>
+            <th>Customer Name</th>
+            <th>Email</th>
+            <th>Shipping Address</th>
+            <th>Total Amount</th>
+            <th>Order Date</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                {{order.id}}
+            </td>
+            <td>
+                {{order.user.first_name}} {{order.user.last_name}}
+            </td>
+            <td>
+                {{order.user.email}}
+            </td>
+            <td>
+                {{order.shipping_address_line1}} <br />
+                {{order.shipping_address_line2}} <br />
+                {{order.shipping_address_postal}}
+            </td>
+            <td>
+                {{centsToDollars order.total_amount}}
+            </td>
+            <td>
+                {{convertIsoDate order.order_date}}
+            </td>
+            <td>
+                {{order.status.name}}
+            </td>
+            <td>
+                <form action="/orders/{{order.order_id}}/status/update" method="POST">
+                    {{> csrfToken}}
+                    {{{form}}}
+                    <input type="submit" value="Update" class="btn btn-sm btn-dark btn-outline-light my-3">
+                </form>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="d-flex justify-content-between align-items-end">
+    <h2 class="display-6 pt-3">Order Items</h2>
+
+
+</div>
+<table class="table table-hover">
+    <thead>
+        <tr class="table-dark">
+            <th></th>
+            <th>Product Name</th>
+            <th>Brand</th>
+            <th>Category</th>
+            <th>Color</th>
+            <th>Quantity</th>
+            <th>Cost</th>
+        </tr>
+
+    </thead>
+    <tbody>
+        {{#each orderItems}}
+        <tr>
+            <td>
+                <img src="{{this.variant.thumbnail_url}}" />
+            </td>
+            <td class="pt-4">
+                {{this.variant.product.name}}
+            </td>
+            <td class="pt-4">
+                {{this.variant.product.brand.name}}
+            </td>
+            <td class="pt-4">
+                {{this.variant.product.category.name}}
+            </td>
+            <td class="pt-4">
+                {{this.variant.color.name}}
+            </td>
+            <td class="pt-4">
+                {{this.quantity}}
+            </td>
+            <td class="pt-4">
+                {{subTotal this.quantity this.variant.product.cost}}
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+
+{{/block}}
+{{/extends}}

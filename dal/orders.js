@@ -44,7 +44,7 @@ const getOrderItemsByOrderId = async (orderId) => {
         order_id: orderId
     }).fetchAll({
         require: false,
-        withRelated: ['variant', 'variant.product.brand', 'variant.color']
+        withRelated: ['variant', 'variant.product.brand', 'variant.product.category', 'variant.color']
     })
 }
 

@@ -18,6 +18,9 @@ app.set("view engine", "hbs");
 // static folder
 app.use(express.static("public"));
 
+hbs.registerPartials('./views/partials')
+
+
 // setup wax-on
 wax.on(hbs.handlebars);
 wax.setLayoutPath("./views/layouts");
@@ -69,6 +72,10 @@ hbs.registerHelper('convertIsoDate', (isoDate) => {
 
 hbs.registerHelper('centsToDollars', (cents) => {
     return (parseInt(cents) / 100).toFixed(2)
+})
+
+hbs.registerHelper('subTotal', (quantity, cost) => {
+    return (quantity * cost)
 })
 
 app.use(flash())

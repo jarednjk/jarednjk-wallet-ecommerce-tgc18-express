@@ -135,7 +135,7 @@ router.post('/create', checkIfAuthenticated, async (req, res) => {
 router.get('/:product_id/update', checkIfAuthenticated, async (req, res) => {
     // retrieve the product
     const productId = req.params.product_id;
-    const product = await dataLayer.getProductByID(productId);
+    const product = await dataLayer.getProductById(productId);
 
     const allMaterials = await dataLayer.getAllMaterials();
     const allBrands = await dataLayer.getAllBrands();
@@ -167,7 +167,7 @@ router.get('/:product_id/update', checkIfAuthenticated, async (req, res) => {
 
 router.post('/:product_id/update', checkIfAuthenticated, async (req, res) => {
     const productId = req.params.product_id;
-    const product = await dataLayer.getProductByID(productId);
+    const product = await dataLayer.getProductById(productId);
 
     const allMaterials = await dataLayer.getAllMaterials();
     const allBrands = await dataLayer.getAllBrands();
@@ -206,7 +206,7 @@ router.post('/:product_id/update', checkIfAuthenticated, async (req, res) => {
 
 router.get('/:product_id/delete', checkIfAuthenticated, async (req, res) => {
     const productId = req.params.product_id;
-    const product = await dataLayer.getProductByID(productId);
+    const product = await dataLayer.getProductById(productId);
 
     res.render('products/delete', {
         'product': product.toJSON()
@@ -216,7 +216,7 @@ router.get('/:product_id/delete', checkIfAuthenticated, async (req, res) => {
 router.post('/:product_id/delete', checkIfAuthenticated, async (req, res) => {
     // fetch the product that we want to delete
     const productId = req.params.product_id;
-    const product = await dataLayer.getProductByID(productId);
+    const product = await dataLayer.getProductById(productId);
 
     await product.destroy();
 
