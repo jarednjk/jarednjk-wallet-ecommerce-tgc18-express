@@ -17,13 +17,14 @@ const createOrderItem = async (orderItemData) => {
 const getAllOrders = async () => {
     const orders = await Order.collection().fetch({
         require: false,
-        withRelated: ['user', 'orderStatus', 'orderItems']
+        withRelated: ['user', 'status', 'orderItems']
     })
+    return orders;
 }
 
 const getAllStatuses = async () => {
     const statuses = await Status.fetchAll().map((status) => {
-        return [status.get('id'), status.get('order_status')];
+        return [status.get('id'), status.get('name')];
     });
     statuses.unshift([0, '---Select One---']);
     return statuses;
@@ -34,7 +35,7 @@ const getOrderById = async (orderId) => {
         id: orderId
     }).fetch({
         require: false,
-        withRelated: ['user', 'orderStatus']
+        withRelated: ['user', 'status']
     })
 }
 

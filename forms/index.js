@@ -79,7 +79,7 @@ const createProductForm = (materials, brands, categories, features) => {
         category_id: fields.string({
             label: 'Category:',
             required: true,
-            errorAfterField: true,   
+            errorAfterField: true,
             widget: widgets.select(),
             choices: categories
         }),
@@ -200,7 +200,7 @@ const createSearchForm = (materials, brands, categories, features) => {
         category_id: fields.string({
             label: 'Category',
             required: false,
-            errorAfterField: true,   
+            errorAfterField: true,
             widget: widgets.select(),
             choices: categories
         }),
@@ -214,4 +214,47 @@ const createSearchForm = (materials, brands, categories, features) => {
     })
 };
 
-module.exports = { createProductForm, createRegistrationForm, createLoginForm, createVariantForm, createSearchForm, bootstrapField };
+const createOrderSearchForm = (statuses) => {
+    return forms.create({
+        order_id: fields.string({
+            label: 'Order ID',
+            required: false,
+            errorAfterField: true
+        }),
+        status_id: fields.string({
+            label: 'Status',
+            required: false,
+            errorAfterField: true,
+            widget: widgets.select(),
+            choices: statuses
+        }),
+        order_date: fields.date({
+            required: false,
+            errorAfterField: true,
+            widget: widgets.date()
+        })
+    })
+}
+
+const createOrderStatusForm = (statuses) => {
+    return forms.create({
+        status_id: fields.string({
+            label: 'Order Status',
+            required: false,
+            errorAfterField: true,
+            widget: widgets.select(),
+            choices: statuses
+        })
+    })
+}
+
+module.exports = {
+    createOrderSearchForm,
+    createOrderStatusForm,
+    createProductForm,
+    createRegistrationForm,
+    createLoginForm,
+    createVariantForm,
+    createSearchForm,
+    bootstrapField
+};

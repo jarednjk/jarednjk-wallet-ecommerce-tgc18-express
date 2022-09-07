@@ -63,6 +63,14 @@ hbs.registerHelper('mmToCm', (mm) => {
     return (parseInt(mm) / 10);
 })
 
+hbs.registerHelper('convertIsoDate', (isoDate) => {
+    return (`${isoDate.getDate()}-${isoDate.getMonth() + 1}-${isoDate.getFullYear()}`)
+})
+
+hbs.registerHelper('centsToDollars', (cents) => {
+    return (parseInt(cents) / 100).toFixed(2)
+})
+
 app.use(flash())
 
 // Register Flash middleware
@@ -82,7 +90,8 @@ const landingRoutes = require('./routes/landing');
 const productRoutes = require('./routes/products');
 const userRoutes = require('./routes/users');
 const cloudinaryRoutes = require('./routes/cloudinary.js');
-const { checkIfAuthenticatedJWT } = require("./middlewares");
+const orderRoutes = require('./routes/orders');
+const { checkIfAuthenticatedJWT, checkIfAuthenticated } = require("./middlewares");
 const api = {
     products: require('./routes/api/products'),
     users: require('./routes/api/users'),
@@ -96,6 +105,7 @@ async function main() {
     app.use('/products', productRoutes);
     app.use('/users', userRoutes);
     app.use('/cloudinary', cloudinaryRoutes);
+    app.use('/orders', checkIfAuthenticated, orderRoutes);
     app.use('/api/products', express.json(), api.products);
     app.use('/api/users', express.json(), api.users);
     app.use('/api/cart', express.json(), checkIfAuthenticatedJWT, api.cart);
