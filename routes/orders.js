@@ -83,10 +83,15 @@ router.get('/:order_id/items', async (req, res) => {
     })
 })
 
-router.post('/:order_id/items', async (req, res) => {
+router.post('/:order_id/update', async (req, res) => {
     await updateStatus(req.params.order_id, req.body.status_id);
     req.flash('success messages', 'Order status updated');
     res.redirect(`/orders/${req.params.order_id}/items`)
 })
+
+// router.post('/:order_id/items/update', async (req, res) => {
+//     await updateStatus(req.params.order_id, req.body.status_id);
+
+// })
 
 module.exports = router;

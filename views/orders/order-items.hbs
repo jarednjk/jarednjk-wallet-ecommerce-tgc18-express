@@ -41,7 +41,7 @@
                 {{order.status.name}}
             </td>
             <td>
-                <form action="/orders/{{order.order_id}}/status/update" method="POST">
+                <form action="/orders/{{order.id}}/update" method="POST">
                     {{> csrfToken}}
                     {{{form}}}
                     <input type="submit" value="Update" class="btn btn-sm btn-dark btn-outline-light my-3">
