@@ -68,7 +68,8 @@ router.post('/login', async (req, res) => {
                 // check if the password matches
                 console.log(user.get('password'))
                 console.log(getHashedPassword(form.data.password))
-                if (user.get('password') === getHashedPassword(form.data.password)) {
+                
+                if (user.get('password') === getHashedPassword(form.data.password) && user.get('role_id') == 1) {
                     // store user details
                     req.session.user = {
                         id: user.get('id'),
