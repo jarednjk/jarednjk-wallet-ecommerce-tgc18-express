@@ -194,4 +194,8 @@ router.post('/process_payment', express.raw({ 'type': 'application/json' }), asy
     }
 })
 
+router.get('/error', function(req,res){
+    res.send('Payment error')
+})
+
 module.exports = router;
