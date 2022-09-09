@@ -39,7 +39,6 @@ router.post('/:variant_id/update', async (req, res) => {
     let userId = req.user.id;
     let variantId = req.params.variant_id;
     let quantity = parseInt(req.body.quantity);
-    console.log('hi', userId, variantId, quantity)
 
     let updateCartItem = await CartServices.setQuantity(userId, variantId, quantity);
     if (updateCartItem) {

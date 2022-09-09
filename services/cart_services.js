@@ -16,10 +16,8 @@ async function addToCart(userId, variantId, quantity) {
     if (!cartItem) {
         if (variantStock >= quantity) {
             await cartDataLayer.createCartItem(userId, variantId, quantity);
-            console.log("hi")
             return true;
         } else {
-            console.log("hi1")
 
             return false;
         }
@@ -32,11 +30,9 @@ async function addToCart(userId, variantId, quantity) {
         if (variantStock > newQuantity) {
             
             await cartDataLayer.updateQuantity(userId, variantId, newQuantity);
-            console.log("hi2")
 
             return true;
         } else {
-            console.log("hi3")
 
             return false;
         }
@@ -72,12 +68,6 @@ async function getCart(userId) {
     return await cartDataLayer.getCart(userId);
 }
 
-// async function checkoutCart(stripeSession) {
-//     const cartItems = JSON.parse(stripeSession.metadata.orders)
-//     for (let cartItem of cartItems) {
-//         await cartDataLayer.removeFromCart(userId, cartItem['variant_id']);
-//     }
-// }
 
 async function emptyCart (userId) {
     const cartItems = await getCart(userId)
